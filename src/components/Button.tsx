@@ -15,7 +15,9 @@ const Button = ({
   const [content, setContent] = useState(initialWord)
 
   const handleWordChange = () => {
-    setContent(prevWord => prevWord === initialWord ? hoverWord : initialWord)
+    setTimeout(() => {
+      setContent(prevWord => prevWord === initialWord ? hoverWord : initialWord)
+    }, 150);
   }
 
   return (

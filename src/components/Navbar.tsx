@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import cn from "../utils/cn";
 import Button from "./Button";
+import hsLogo from "../assets/hs-logo.svg"
 
 const Navbar = () => {
   const [showVariant, setShowVariant] = useState(false);
@@ -12,8 +13,7 @@ const Navbar = () => {
       }
       const scrolled = document.scrollingElement.scrollTop;
 
-      // console.log(e);
-      if (scrolled >= 450) {
+      if (scrolled >= 180) {
         setShowVariant(true);
       } else {
         setShowVariant(false);
@@ -24,15 +24,23 @@ const Navbar = () => {
   return (
     <div
       className={cn(
-        "h-fit w-screen flex px-[80px] h-[100px] fixed top-0",
-        showVariant ? "justify-between" : "justify-end"
+        "h-fit w-screen flex h-[100px] px-[80px] py-6 fixed top-0",
+        showVariant ? "justify-between bg-tangerine" : "justify-end"
       )}
     >
-      <div className="flex gap-[60px] items-center h-full text-teal">
-        <span>About</span>
-        <span>Theatre</span>
-        <span>More Projects</span>
-        <Button className="" href="" initialWord="Get in touch" hoverWord="Email me"/>
+      {showVariant && <img src={hsLogo} alt="Handwritten logo of Harry's initials - HS" />}
+      <div className={cn("flex gap-[60px] items-center h-full",
+        showVariant ? "text-persian" : "text-teal"
+      )}>
+        <a>About</a>
+        <a>Theatre</a>
+        <a>More Projects</a>
+        <Button
+          className=""
+          href=""
+          initialWord="Get in touch"
+          hoverWord="Email me"
+        />
       </div>
     </div>
   );

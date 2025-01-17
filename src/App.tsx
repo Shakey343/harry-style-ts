@@ -1,9 +1,10 @@
 import "./App.css";
 import Navbar from "./components/Navbar";
-import homepageVideo from "./assets/Cheek to Cheek Harry Website.mp4";
 import muteIcon from "./assets/mute.svg";
 import playIcon from "./assets/play.svg";
 import { useState } from "react";
+import Container from "./components/Conatiner";
+import harryStyleTitle from "./assets/harry-style.svg"
 
 function App() {
   const [mute, setMute] = useState(true);
@@ -38,7 +39,10 @@ function App() {
           muted
           className="w-screen h-screen object-cover object-left xl:object-center fixed -z-10"
         >
-          <source src="https://www.dropbox.com/scl/fi/8c4p9pdxoc0qpvaju7e09/Cheek-to-Cheek-Harry-Website.mp4?rlkey=j2a5wo2kvp3duvhn1nwbl4bhq&st=vko11vnv&raw=1" type="video/mp4" />
+          <source
+            src="https://www.dropbox.com/scl/fi/8c4p9pdxoc0qpvaju7e09/Cheek-to-Cheek-Harry-Website.mp4?rlkey=j2a5wo2kvp3duvhn1nwbl4bhq&st=vko11vnv&raw=1"
+            type="video/mp4"
+          />
           {/* <source src={homepageVideoWebM} type="video/webm" /> */}
           Your browser does not support the video tag.
         </video>
@@ -57,17 +61,32 @@ function App() {
           </div>
         )}
         <button
-          className="absolute bottom-[50px] left-[40px]"
+          className="fixed bottom-[50px] left-[40px]"
           type="button"
           onClick={handleUnmute}
         >
           <img src={mute ? muteIcon : playIcon} alt="" />
         </button>
-        <div className="absolute">
-          <h1>Harry Style</h1>
-          <span>COMPOSER | ARRANGER | MUSICAL DIRECTOR</span>
+        <div className="w-screen h-screen flex justify-center items-center">
+          <div className="text-center text-bone pb-[400px]">
+            <img src={harryStyleTitle} alt="" className="" />
+            <span>COMPOSER | ARRANGER | MUSICAL DIRECTOR</span>
+          </div>
         </div>
       </div>
+
+      <Container className="py-40">
+        <h2 className="w-full text-center">Theatre</h2>
+        <div></div>
+      </Container>
+
+      <Container className="py-40">
+        <h2 className="w-full text-center">More Projects</h2>
+      </Container>
+
+      <Container className="py-40">
+        <h2 className="w-full text-center">About</h2>
+      </Container>
     </div>
   );
 }
