@@ -4,7 +4,8 @@ import muteIcon from "./assets/mute.svg";
 import playIcon from "./assets/play.svg";
 import { useState } from "react";
 import Container from "./components/Conatiner";
-import harryStyleTitle from "./assets/harry-style.svg"
+import harryStyleTitle from "./assets/harry-style.svg";
+import DropboxImageViewer from "./components/DropboxImageViewer";
 
 function App() {
   const [mute, setMute] = useState(true);
@@ -31,6 +32,21 @@ function App() {
   };
 
   return (
+    <>
+      {showPlayBtn && (
+        <div className="fixed top-0 h-screen w-screen bg-night z-50 overflow-hidden">
+          <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-center">
+            <p className="text-tangerine mb-4 text-2xl">(Sound on)</p>
+            <button
+              className="bg-teal text-tangerine px-5 py-3 mb-4"
+              type="button"
+              onClick={handlePlayBtn}
+            >
+              Enter
+            </button>
+          </div>
+        </div>
+      )}
     <div className="relative">
       <Navbar />
       <div className="h-screen overflow-hidden">
@@ -46,20 +62,7 @@ function App() {
           {/* <source src={homepageVideoWebM} type="video/webm" /> */}
           Your browser does not support the video tag.
         </video>
-        {showPlayBtn && (
-          <div className="h-screen w-screen relative bg-night">
-            <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-center">
-              <p className="text-tangerine mb-4 text-2xl">(Sound on)</p>
-              <button
-                className="bg-teal text-tangerine px-5 py-3 mb-4"
-                type="button"
-                onClick={handlePlayBtn}
-              >
-                PLAY
-              </button>
-            </div>
-          </div>
-        )}
+
         <button
           className="fixed bottom-[50px] left-[40px]"
           type="button"
@@ -77,7 +80,7 @@ function App() {
 
       <Container className="py-40">
         <h2 className="w-full text-center">Theatre</h2>
-        <div></div>
+        <DropboxImageViewer />
       </Container>
 
       <Container className="py-40">
@@ -88,6 +91,7 @@ function App() {
         <h2 className="w-full text-center">About</h2>
       </Container>
     </div>
+    </>
   );
 }
 

@@ -8,7 +8,7 @@ const Button = ({
   hoverWord
 }: {
   className: string;
-  href: string;
+  href?: string;
   initialWord: string;
   hoverWord: string;
 }) => {
@@ -17,7 +17,7 @@ const Button = ({
   const handleWordChange = () => {
     setTimeout(() => {
       setContent(prevWord => prevWord === initialWord ? hoverWord : initialWord)
-    }, 150);
+    }, 190);
   }
 
   return (
