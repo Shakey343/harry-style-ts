@@ -5,7 +5,7 @@ import playIcon from "./assets/play.svg";
 import { useState } from "react";
 import Container from "./components/Conatiner";
 import harryStyleTitle from "./assets/harry-style.svg";
-import DropboxImageViewer from "./components/DropboxImageViewer";
+import TheatreImages from "./components/TheatreImages";
 
 function App() {
   const [mute, setMute] = useState(true);
@@ -80,7 +80,7 @@ function App() {
 
       <Container className="py-40">
         <h2 className="w-full text-center">Theatre</h2>
-        <DropboxImageViewer />
+        <TheatreImages />
       </Container>
 
       <Container className="py-40">
