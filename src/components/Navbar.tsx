@@ -25,7 +25,7 @@ const Navbar = () => {
     <div
       className={cn(
         "h-fit w-screen flex h-[100px] px-[80px] py-6 fixed top-0",
-        showVariant ? "justify-between bg-tangerine" : "justify-end"
+        showVariant ? "justify-between bg-tangerine shadow" : "justify-end"
       )}
     >
       {showVariant && <img src={hsLogo} alt="Handwritten logo of Harry's initials - HS" />}
