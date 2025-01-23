@@ -85,21 +85,21 @@ function App() {
         </div>
 
         <Container className="py-40">
-          <div className="w-full flex justify-center mb-10">
+          <div className="w-full flex justify-center mb-16">
             <img src={theatreTitle} alt="" className="" />
           </div>
           <TheatreImages />
         </Container>
 
         <Container className="py-40">
-          <div className="w-full flex justify-center mb-10">
+          <div className="w-full flex justify-center mb-16">
             <img src={moreProjectsTitle} alt="" className="" />
           </div>
           <MoreProjects />
         </Container>
 
         <Container className="py-40">
-          <div className="w-full flex justify-center mb-10">
+          <div className="w-full flex justify-center mb-16">
             <img src={aboutTitle} alt="" className="" />
           </div>
           <About />
