@@ -84,21 +84,21 @@ function App() {
           </div>
         </div>
 
-        <Container className="py-40">
+        <Container className="py-40" id="theatre">
           <div className="w-full flex justify-center mb-16">
             <img src={theatreTitle} alt="" className="" />
           </div>
           <TheatreImages />
         </Container>
 
-        <Container className="py-40">
+        <Container className="py-40" id="projects">
           <div className="w-full flex justify-center mb-16">
             <img src={moreProjectsTitle} alt="" className="" />
           </div>
           <MoreProjects />
         </Container>
 
-        <Container className="py-40">
+        <Container className="py-40" id="about">
           <div className="w-full flex justify-center mb-16">
             <img src={aboutTitle} alt="" className="" />
           </div>

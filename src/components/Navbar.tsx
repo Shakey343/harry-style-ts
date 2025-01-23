@@ -24,17 +24,17 @@ const Navbar = () => {
   return (
     <div
       className={cn(
-        "h-fit w-screen flex h-[100px] px-[80px] py-6 fixed top-0",
+        "h-fit w-screen flex items-center h-[100px] px-[80px] py-6 fixed top-0 z-30",
         showVariant ? "justify-between bg-tangerine shadow" : "justify-end"
       )}
     >
-      {showVariant && <img src={hsLogo} alt="Handwritten logo of Harry's initials - HS" />}
+      {showVariant && <a href="#"><img src={hsLogo} alt="Handwritten logo of Harry's initials - HS" /></a>}
       <div className={cn("flex gap-[60px] items-center h-full",
         showVariant ? "text-persian" : "text-teal"
       )}>
-        <a>About</a>
-        <a>Theatre</a>
-        <a>More Projects</a>
+        <a href="#theatre">Theatre</a>
+        <a href="#projects">More Projects</a>
+        <a href="#about">About</a>
         <Button
           className=""
           href=""

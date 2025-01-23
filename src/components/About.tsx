@@ -43,7 +43,12 @@ const About = () => {
           ensembles. I am also a pianist for Molto Music Group having played
           various London hotels since 2021.
         </p>
-        <Button className="bg-tangerine text-teal hover:border-2 hover:border" initialWord="Get in touch" hoverWord="Email me" />
+        <Button
+          className="bg-tangerine text-teal hover:ring-tangerine hover:bg-teal hover:text-tangerine"
+          href=""
+          initialWord="Get in touch"
+          hoverWord="Email me"
+        />
       </div>
     </div>
   );
