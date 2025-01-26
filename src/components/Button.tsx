@@ -1,6 +1,9 @@
 import cn from "../utils/cn";
 import { useState } from 'react'
 
+// IS THERE A WAY TO CHECK IF USER HAS EMAIL SETUP ON BROWSER?
+// If so, open email app, else open modal form
+
 const Button = ({
   className,
   href,

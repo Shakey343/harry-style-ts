@@ -1,5 +1,8 @@
 import cn from "../utils/cn";
 
+// Get icon showing on hover according to the link
+// After the first "." if === "soundcloud" etc.
+
 const Card = ({
   imgUrl,
   link,
