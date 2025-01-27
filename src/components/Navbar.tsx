@@ -3,7 +3,7 @@ import cn from "../utils/cn";
 import Button from "./Button";
 import hsLogo from "../assets/hs-logo.svg"
 
-const Navbar = () => {
+const Navbar = ({ openModal }: { openModal: () => void }) => {
   const [showVariant, setShowVariant] = useState(false);
 
   useEffect(() => {
@@ -37,9 +37,9 @@ const Navbar = () => {
         <a href="#about">About</a>
         <Button
           className=""
-          href=""
           initialWord="Get in touch"
           hoverWord="Email me"
+          onClick={openModal}
         />
       </div>
     </div>

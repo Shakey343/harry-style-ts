@@ -12,10 +12,20 @@ import TheatreImages from "./components/Theatre";
 import MoreProjects from "./components/MoreProjects";
 import About from "./components/About";
 import Footer from "./components/Footer";
+import Modal from "./components/Modal";
 
 function App() {
   const [mute, setMute] = useState(true);
   const [showPlayBtn, setShowPlayBtn] = useState(true);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const openModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setIsModalVisible(false);
+  };
 
   const handlePlayBtn = () => {
     setShowPlayBtn(false);
@@ -54,7 +64,7 @@ function App() {
         </div>
       )}
       <div className="relative">
-        <Navbar />
+        <Navbar openModal={openModal} />
         <div className="h-screen overflow-hidden">
           <video
             loop
@@ -102,8 +112,12 @@ function App() {
           <div className="w-full flex justify-center mb-16">
             <img src={aboutTitle} alt="" className="" />
           </div>
-          <About />
+          <About openModal={openModal} />
         </Container>
+
+        <Modal isVisible={isModalVisible} onClose={closeModal}>
+          <p>This is the modal content. You can add anything here!</p>
+        </Modal>
 
         <Footer />
       </div>

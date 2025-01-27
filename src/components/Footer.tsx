@@ -6,7 +6,9 @@ const Footer = () => {
   return (
     <div className="bg-bone h-[140px]">
       <Container className="flex justify-between items-center h-full">
-        <img src={email} alt="" />
+        <a href="mailto:h.style@rocketmail.com?subject=Music%20Enquiry&amp;body=Hello%20Harry..." target="_blank" title="Email" className="hover:opacity-60">
+          <img src={email} alt="" />
+        </a>
         <Socials />
       </Container>
     </div>
