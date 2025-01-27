@@ -36,8 +36,8 @@ const imgLinks = [
 const MoreProjects = () => {
   return (
     <div className="flex flex-wrap justify-center gap-10">
-      {imgLinks.map((obj) => (
-        <Card imgUrl={navigator.userAgent.includes("Safari") ? obj.img2 : obj.img} link={obj.url} className="" />
+      {imgLinks.map((obj, i) => (
+        <Card key={i} imgUrl={navigator.userAgent.includes("Safari") ? obj.img2 : obj.img} link={obj.url} className="" />
       ))}
     </div>
   );
