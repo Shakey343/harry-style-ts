@@ -14,7 +14,7 @@ export default {
         tangerine: "#F5A58C"
       },
       fontFamily: {
-        sans: ['Nepomuk', 'serif'],
+        serif: ['Nepomuk', 'serif'],
         nepomuk: ['Nepomuk'],
       },
     },

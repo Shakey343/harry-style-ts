@@ -30,7 +30,7 @@ const Navbar = ({ openModal }: { openModal: () => void }) => {
     >
       {showVariant && <a href="#"><img src={hsLogo} alt="Handwritten logo of Harry's initials - HS" /></a>}
       <div className={cn("flex gap-[60px] items-center h-full",
-        showVariant ? "text-persian" : "text-teal"
+        showVariant ? "text-teal" : "text-teal"
       )}>
         <a href="#theatre">Theatre</a>
         <a href="#projects">More Projects</a>
