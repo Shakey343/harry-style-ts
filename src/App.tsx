@@ -13,11 +13,13 @@ import MoreProjects from "./components/MoreProjects";
 import About from "./components/About";
 import Footer from "./components/Footer";
 import Modal from "./components/Modal";
+import cn from "./utils/cn";
 
 function App() {
   const [mute, setMute] = useState(true);
   const [showPlayBtn, setShowPlayBtn] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const openModal = () => {
     setIsModalVisible(true);
@@ -30,6 +32,9 @@ function App() {
   const handlePlayBtn = () => {
     setShowPlayBtn(false);
     handleUnmute();
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
   };
 
   const handleUnmute = () => {
@@ -65,7 +70,7 @@ function App() {
       )}
       <div className="relative">
         <Navbar openModal={openModal} />
-        <div className="h-screen overflow-hidden">
+        <div className="h-screen overflow-hidden relative">
           <video
             loop
             muted
@@ -86,38 +91,36 @@ function App() {
           >
             <img src={mute ? muteIcon : playIcon} alt="" />
           </button>
-          <div className="w-screen h-screen flex justify-center items-center">
-            <div className="text-center text-bone pb-[400px]">
-              <img src={harryStyleTitle} alt="" className="" />
-              <span>COMPOSER | ARRANGER | MUSICAL DIRECTOR</span>
+          <div className={cn("absolute left-1/2 -translate-x-1/2 transition-all duration-1000 ease-in-out", loading ? "top-1/2 -translate-y-1/2 scale-125" : "top-[14%] scale-75")}>
+            <div className="text-center text-bone">
+              <img src={harryStyleTitle} alt="" className="mb-4" />
+              <span className="text-2xl">COMPOSER | ARRANGER | MUSICAL DIRECTOR</span>
             </div>
           </div>
         </div>
 
         <Container className="py-40" id="theatre">
           <div className="w-full flex justify-center mb-16">
-            <img src={theatreTitle} alt="" className="" />
+            <img src={theatreTitle} alt="" className="scale-125" />
           </div>
           <TheatreImages />
         </Container>
 
         <Container className="py-40" id="projects">
           <div className="w-full flex justify-center mb-16">
-            <img src={moreProjectsTitle} alt="" className="" />
+            <img src={moreProjectsTitle} alt="" className="scale-125" />
           </div>
           <MoreProjects />
         </Container>
 
         <Container className="py-40" id="about">
           <div className="w-full flex justify-center mb-16">
-            <img src={aboutTitle} alt="" className="" />
+            <img src={aboutTitle} alt="" className="scale-125" />
           </div>
           <About openModal={openModal} />
         </Container>
 
-        <Modal isVisible={isModalVisible} onClose={closeModal}>
-          <p>This is the modal content. You can add anything here!</p>
-        </Modal>
+        <Modal isVisible={isModalVisible} onClose={closeModal} />
 
         <Footer />
       </div>

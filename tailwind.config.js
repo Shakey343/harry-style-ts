@@ -12,7 +12,11 @@ export default {
         night: "#161619",
         persian: "#B83C3B",
         tangerine: "#F5A58C"
-      }
+      },
+      fontFamily: {
+        sans: ['Nepomuk', 'serif'],
+        nepomuk: ['Nepomuk'],
+      },
     },
   },
   plugins: [],
