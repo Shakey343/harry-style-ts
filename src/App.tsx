@@ -91,10 +91,19 @@ function App() {
           >
             <img src={mute ? muteIcon : playIcon} alt="" />
           </button>
-          <div className={cn("absolute left-1/2 -translate-x-1/2 transition-all duration-1000 ease-in-out", loading ? "top-1/2 -translate-y-1/2 scale-125" : "top-[14%] scale-75")}>
+          <div
+            className={cn(
+              "absolute left-1/2 -translate-x-1/2 transition-all duration-1000 ease-in-out",
+              loading
+                ? "top-1/2 -translate-y-1/2 scale-125"
+                : "top-[14%] scale-75"
+            )}
+          >
             <div className="text-center text-bone">
               <img src={harryStyleTitle} alt="" className="mb-4" />
-              <span className="text-2xl">COMPOSER | ARRANGER | MUSICAL DIRECTOR</span>
+              <span className="text-2xl">
+                COMPOSER | ARRANGER | MUSICAL DIRECTOR
+              </span>
             </div>
           </div>
         </div>
