@@ -29,14 +29,14 @@ const Modal: React.FC<ModalProps> = ({ isVisible, onClose }) => {
 
     try {
       const result = await emailjs.send(
-        "YOUR_SERVICE_ID", // Replace with your EmailJS Service ID
-        "YOUR_TEMPLATE_ID", // Replace with your EmailJS Template ID
+        import.meta.env.VITE_EMAILJS_SERVICE_ID, // Replace with your EmailJS Service ID
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID, // Replace with your EmailJS Template ID
         {
           from_name: formData.name,
           reply_to: formData.email,
           message: formData.message,
         },
-        "YOUR_PUBLIC_KEY" // Replace with your EmailJS Public Key
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY // Replace with your EmailJS Public Key
       );
       console.log("Email sent successfully:", result.text);
       setIsSent(true);
