@@ -14,7 +14,7 @@ import Modal from "./components/Modal";
 import cn from "./utils/cn";
 import Mute from "./components/icons/Mute";
 import Play from "./components/icons/Play";
-import { isMobile } from "react-device-detect";
+// import { isMobile } from "react-device-detect";
 
 function App() {
   const [mute, setMute] = useState(true);
@@ -32,15 +32,7 @@ function App() {
 
   const handlePlayBtn = () => {
     setShowPlayBtn(false);
-    if (!isMobile) {
-      handleUnmute();
-    } else {
-      const video = document.querySelector("video");
-      if (!video) {
-        return;
-      }
-      video.play();
-    }
+    handleUnmute();
     setTimeout(() => {
       setLoading(false);
     }, 1000);
@@ -83,6 +75,8 @@ function App() {
           <video
             loop
             muted
+            playsInline
+            controls={false}
             className="w-full h-screen object-cover object-left xl:object-center fixed -z-10"
           >
             <source
@@ -118,9 +112,15 @@ function App() {
                 COMPOSER | ARRANGER | MUSICAL DIRECTOR
               </span>
               <div className="md:hidden text-4xl">
-                <p>COMPOSER</p>
-                <p>ARRANGER</p>
-                <p>MUSICAL DIRECTOR</p>
+                <p>
+                  COMPOSER
+                </p>
+                <p>
+                  ARRANGER
+                </p>
+                <p>
+                  MUSICAL DIRECTOR
+                </p>
               </div>
             </div>
           </div>
