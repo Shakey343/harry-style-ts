@@ -2,14 +2,14 @@ import Button from "./Button";
 
 const About = ({ openModal }: { openModal: () => void }) => {
   return (
-    <div className="flex w-full bg-teal">
+    <div className="md:flex w-full bg-center bg-teal">
       <img
         src="https://www.dropbox.com/scl/fi/lczazu2li9f69huusci7x/Harry-Style-Headshot-Left.jpg?rlkey=j6ytrxab2woj8a33rqodjx3iy&st=510e0vk1&raw=1"
         alt=""
-        className="w-1/2 object-cover"
+        className="w-1/2 object-cover hidden md:block"
       />
-      <div className="w-1/2 p-10 flex flex-col gap-10 items-center">
-        <p>
+      <div className="md:w-1/2 p-10 flex flex-col gap-10 items-center text-bone">
+        <p className="pl-10">
           Ever since One Direction won the X Factor in 2010, I have been
           mistaken for Harry Styles on countless occasions, and I am humbled
           every day when I joke to myself that people have thought that he is

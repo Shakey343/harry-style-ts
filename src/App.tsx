@@ -1,7 +1,5 @@
 import "./App.css";
 import { useState } from "react";
-import muteIcon from "./assets/mute.svg";
-import playIcon from "./assets/play.svg";
 import harryStyleTitle from "./assets/harry-style.svg";
 import theatreTitle from "./assets/theatre.svg";
 import moreProjectsTitle from "./assets/moreProjects.svg";
@@ -14,6 +12,8 @@ import About from "./components/About";
 import Footer from "./components/Footer";
 import Modal from "./components/Modal";
 import cn from "./utils/cn";
+import Mute from "./components/icons/Mute";
+import Play from "./components/icons/Play";
 
 function App() {
   const [mute, setMute] = useState(true);
@@ -55,7 +55,7 @@ function App() {
   return (
     <>
       {showPlayBtn && (
-        <div className="fixed top-0 h-screen w-screen bg-night z-50 overflow-hidden">
+        <div className="fixed top-0 h-full w-full bg-night z-50 overflow-hidden">
           <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-center">
             <p className="text-tangerine mb-4 text-2xl">(Sound on)</p>
             <button
@@ -74,7 +74,7 @@ function App() {
           <video
             loop
             muted
-            className="w-screen h-screen object-cover object-left xl:object-center fixed -z-10"
+            className="w-full h-screen object-cover object-left xl:object-center fixed -z-10"
           >
             <source
               src="https://www.dropbox.com/scl/fi/8c4p9pdxoc0qpvaju7e09/Cheek-to-Cheek-Harry-Website.mp4?rlkey=j2a5wo2kvp3duvhn1nwbl4bhq&st=vko11vnv&raw=1"
@@ -85,25 +85,40 @@ function App() {
           </video>
 
           <button
-            className="fixed bottom-[57px] hidden lg:block left-4 xl:left-8 hover:opacity-80"
+            className="fixed bottom-[113px] md:bottom-[57px] left-8 hover:opacity-80"
             type="button"
             onClick={handleUnmute}
           >
-            <img src={mute ? muteIcon : playIcon} alt="" />
+            {mute ? (
+              <Mute className="text-tangerine md:text-teal" />
+            ) : (
+              <Play className="text-tangerine md:text-teal" />
+            )}
           </button>
           <div
             className={cn(
-              "absolute left-1/2 -translate-x-1/2 transition-all duration-1000 ease-in-out",
+              "absolute left-1/2 -translate-x-1/2 transition-all duration-1000 ease-in-out text-",
               loading
-                ? "top-1/2 -translate-y-1/2 scale-125"
-                : "top-[14%] scale-75"
+                ? "top-1/2 -translate-y-1/2 sm:scale-125"
+                : "top-[18%] md:top-[14%] scale-[80%] sm:scale-75"
             )}
           >
-            <div className="text-center text-bone">
+            <div className="text-center text-nowrap text-bone2 md:text-bone drop-shadow-xl">
               <img src={harryStyleTitle} alt="" className="mb-4" />
-              <span className="text-2xl">
+              <span className="text-2xl hidden md:block">
                 COMPOSER | ARRANGER | MUSICAL DIRECTOR
               </span>
+              <div className="md:hidden text-4xl">
+                <p>
+                  COMPOSER
+                </p>
+                <p>
+                  ARRANGER
+                </p>
+                <p>
+                  MUSICAL DIRECTOR
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -122,12 +137,19 @@ function App() {
           <MoreProjects />
         </Container>
 
-        <Container className="py-40" id="about">
+        <Container className="py-40 hidden md:block" id="about">
           <div className="w-full flex justify-center mb-16">
             <img src={aboutTitle} alt="" className="scale-125" />
           </div>
           <About openModal={openModal} />
         </Container>
+
+        <div className="pt-40 block md:hidden" id="about-mobile">
+          <div className="w-full flex justify-center mb-16">
+            <img src={aboutTitle} alt="" className="scale-125" />
+          </div>
+          <About openModal={openModal} />
+        </div>
 
         <Modal isVisible={isModalVisible} onClose={closeModal} />
 

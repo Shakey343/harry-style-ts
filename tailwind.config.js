@@ -9,6 +9,7 @@ export default {
       colors: {
         teal: "#218380",
         bone: "#D5D0C3",
+        bone2: "#fff9eb",
         night: "#161619",
         persian: "#B83C3B",
         tangerine: "#F5A58C"
