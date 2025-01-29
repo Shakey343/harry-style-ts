@@ -8,8 +8,8 @@ const About = ({ openModal }: { openModal: () => void }) => {
         alt=""
         className="w-1/2 object-cover hidden md:block"
       />
-      <div className="md:w-1/2 p-10 flex flex-col gap-10 items-center text-bone">
-        <p className="pl-10">
+      <div className="md:w-1/2 p-10 pt-10 flex flex-col gap-10 items-center text-bone">
+        <p className="px-10">
           Ever since One Direction won the X Factor in 2010, I have been
           mistaken for Harry Styles on countless occasions, and I am humbled
           every day when I joke to myself that people have thought that he is

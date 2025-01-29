@@ -77,6 +77,7 @@ function App() {
             muted
             playsInline
             controls={false}
+            preload="auto"
             className="w-full h-screen object-cover object-left xl:object-center fixed -z-10"
           >
             <source
@@ -88,7 +89,7 @@ function App() {
           </video>
 
           <button
-            className="fixed bottom-[113px] md:bottom-[57px] left-8 hover:opacity-80"
+            className="fixed bottom-20 md:bottom-[57px] left-6 md:left-8 hover:opacity-80"
             type="button"
             onClick={handleUnmute}
           >
