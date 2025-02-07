@@ -39,7 +39,7 @@ const Navbar = ({ openModal }: { openModal: () => void }) => {
     <nav>
       <div
         className={cn(
-          "h-fit w-full flex items-center px-8 md:px-[80px] py-5 fixed top-0 z-30 transition-all ease-in duration-300",
+          "h-fit min-h-[88px] w-full flex items-center px-8 md:px-[80px] py-5 fixed top-0 z-30 transition-all ease-in duration-300",
           showVariant
             ? "justify-between md:bg-tangerine md:shadow"
             : "md:justify-end justify-between",
