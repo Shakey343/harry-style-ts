@@ -39,7 +39,7 @@ const Navbar = ({ openModal }: { openModal: () => void }) => {
     <nav>
       <div
         className={cn(
-          "h-fit w-full flex items-center h-[100px] px-8 md:px-[80px] py-6 fixed top-0 z-30",
+          "h-fit w-full flex items-center px-8 md:px-[80px] py-5 fixed top-0 z-30 transition-all ease-in duration-300",
           showVariant
             ? "justify-between md:bg-tangerine md:shadow"
             : "md:justify-end justify-between",
@@ -47,8 +47,8 @@ const Navbar = ({ openModal }: { openModal: () => void }) => {
         )}
       >
         {showVariant && (
-          <a href="#" className="mr-6 hidden md:block">
-            <img src={hsLogo} alt="Handwritten logo of Harry's initials - HS" />
+          <a href="#" className="mr-6 hidden md:block transition-all ease-in duration-300">
+            <img src={hsLogo} className="h-12" alt="Handwritten logo of Harry's initials - HS" />
           </a>
         )}
         <a
@@ -101,14 +101,11 @@ const Navbar = ({ openModal }: { openModal: () => void }) => {
           </button>
         </div>
         <div
-          className={cn(
-            "gap-[60px] items-center h-full sm:flex hidden",
-            showVariant ? "text-teal" : "text-teal"
-          )}
+          className="gap-[60px] items-center h-full sm:flex hidden text-teal"
         >
-          <a href="#theatre">Theatre</a>
-          <a href="#projects">More Projects</a>
-          <a href="#about">About</a>
+          <a href="#theatre" className="hover:underline underline-offset-4 transition-all duration-300 ease">Theatre</a>
+          <a href="#projects" className="hover:underline underline-offset-4 transition-all duration-300 ease">More Projects</a>
+          <a href="#about" className="hover:underline underline-offset-4 transition-all duration-300 ease">About</a>
           <Button
             className=""
             initialWord="Get in touch"

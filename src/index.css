@@ -2,32 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: 'Nepomuk';
-  src: url('/src/assets/Nepomuk/Nepomuk-Regular.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-}
+@layer base {
+  @font-face {
+    font-family: 'Nepomuk';
+    src: url('/src/assets/Nepomuk/Nepomuk-Regular.woff2') format('woff2'),
+        url('/src/assets/Nepomuk/Nepomuk-Regular.otf') format('opentype');
+  }
 
-@font-face {
-  font-family: 'Nepomuk';
-  src: url('/src/assets/Nepomuk/Nepomuk-Bold.otf') format('opentype');
-  font-weight: bold;
-  font-style: normal;
-}
+  @font-face {
+    font-family: 'Nepomuk';
+    src: url('/src/assets/Nepomuk/Nepomuk-Bold.otf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+  }
 
-@font-face {
-  font-family: 'Nepomuk';
-  src: url('/src/assets/Nepomuk/Nepomuk-BoldItalic.otf') format('opentype');
-  font-weight: bold;
-  font-style: italic;
-}
+  @font-face {
+    font-family: 'Nepomuk';
+    src: url('/src/assets/Nepomuk/Nepomuk-BoldItalic.otf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+  }
 
-@font-face {
-  font-family: 'Nepomuk';
-  src: url('/src/assets/Nepomuk/Nepomuk-Italic.otf') format('opentype');
-  font-weight: normal;
-  font-style: italic;
+  @font-face {
+    font-family: 'Nepomuk';
+    src: url('/src/assets/Nepomuk/Nepomuk-Italic.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  html {
+    font-family: "Nepomuk", serif;
+  }
 }
 
 input:-webkit-autofill,
