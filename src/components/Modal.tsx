@@ -56,7 +56,7 @@ const Modal: React.FC<ModalProps> = ({ isVisible, onClose }) => {
       <div className="bg-teal p-10 rounded-sm shadow-lg w-full md:w-[40%] relative">
       <button
         onClick={onClose}
-        className="absolute right-4 top-6 px-6 py-2 text-night font-sans font-bold text-tangerine hover:text-tangerine/80 transition-all ease"
+        className="absolute right-4 top-6 px-6 py-2 font-sans font-bold text-tangerine hover:text-tangerine/80 transition-all ease"
       >
         X
       </button>
