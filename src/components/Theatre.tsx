@@ -1,4 +1,6 @@
+import { useEffect } from "react";
 import Card from "./Card";
+import axios from "axios";
 
 const imgLinks = [
   {
@@ -40,6 +42,15 @@ const imgLinks = [
 ];
 
 const TheatreImages = () => {
+  useEffect(() => {
+    axios
+      .get(`${import.meta.env.VITE_BACKEND_URL}api/images/by-tag?tag=logo`)
+      .then((res) => {
+        setImages(res.data.images);
+      })
+      .catch((err) => console.error("Error fetching images:", err));
+  }, []);
+
   return (
     <div className="flex flex-wrap justify-center gap-10">
       {imgLinks.map((obj, i) => (
