@@ -6,14 +6,14 @@ import moreProjectsTitle from "../assets/moreProjects.svg";
 import aboutTitle from "../assets/about.svg";
 import Navbar from "./Navbar";
 import Container from "./Container";
-import TheatreImages from "./Theatre";
-import MoreProjects from "./MoreProjects";
+import ProjectSection from "./ProjectSection";
 import About from "./About";
 import Footer from "./Footer";
 import Modal from "./Modal";
 import cn from "../utils/cn";
 import Mute from "./icons/Mute";
 import Play from "./icons/Play";
+
 
 const Homepage = () => {
   const [mute, setMute] = useState(true);
@@ -160,14 +160,14 @@ const Homepage = () => {
           <div className="w-full flex justify-center mb-16">
             <img src={theatreTitle} alt="" className="scale-125" />
           </div>
-          <TheatreImages />
+          <ProjectSection tag="theatre" />
         </Container>
 
         <Container className="py-40" id="projects">
           <div className="w-full flex justify-center mb-16">
             <img src={moreProjectsTitle} alt="" className="scale-125" />
           </div>
-          <MoreProjects />
+          <ProjectSection tag="more-projects" />
         </Container>
 
         <Container className="py-40 hidden md:block" id="about">
