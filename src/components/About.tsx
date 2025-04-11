@@ -4,8 +4,8 @@ const About = ({ openModal }: { openModal: () => void }) => {
   return (
     <div className="md:flex w-full bg-center bg-teal">
       <img
-        src="https://www.dropbox.com/scl/fi/lczazu2li9f69huusci7x/Harry-Style-Headshot-Left.jpg?rlkey=j6ytrxab2woj8a33rqodjx3iy&st=510e0vk1&raw=1"
-        alt=""
+        src="https://res.cloudinary.com/dlaso8l44/image/upload/v1744223578/Harry_Style_Headshot_Left_ulqt4z.jpg"
+        alt="Headshot of Harry smiling."
         className="w-1/2 object-cover hidden md:block"
       />
       <div className="md:w-1/2 p-10 pt-10 flex flex-col gap-10 items-center text-bone">

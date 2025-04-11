@@ -113,6 +113,10 @@ const Homepage = () => {
               src="https://www.dropbox.com/scl/fi/8c4p9pdxoc0qpvaju7e09/Cheek-to-Cheek-Harry-Website.mp4?rlkey=j2a5wo2kvp3duvhn1nwbl4bhq&st=vko11vnv&raw=1"
               type="video/mp4"
             />
+            <source
+              src="https://res.cloudinary.com/dlaso8l44/video/upload/v1744271669/Cheek_to_Cheek_Harry_Website_Compressed_-_960_x_540_wiunxh.mov"
+              type="video/mov"
+            />
             {/* <source src={homepageVideoWebM} type="video/webm" /> */}
             Your browser does not support the video tag.
           </video>
@@ -158,28 +162,28 @@ const Homepage = () => {
 
         <Container className="py-40" id="theatre">
           <div className="w-full flex justify-center mb-16">
-            <img src={theatreTitle} alt="" className="scale-125" />
+            <img src={theatreTitle} alt="Handwritten title - Theatre." className="scale-125" />
           </div>
           <ProjectSection tag="theatre" />
         </Container>
 
         <Container className="py-40" id="projects">
           <div className="w-full flex justify-center mb-16">
-            <img src={moreProjectsTitle} alt="" className="scale-125" />
+            <img src={moreProjectsTitle} alt="Handwritten title - More Projects." className="scale-125" />
           </div>
           <ProjectSection tag="more-projects" />
         </Container>
 
         <Container className="py-40 hidden md:block" id="about">
           <div className="w-full flex justify-center mb-16">
-            <img src={aboutTitle} alt="" className="scale-125" />
+            <img src={aboutTitle} alt="Handwritten title - About." className="scale-125" />
           </div>
           <About openModal={openModal} />
         </Container>
 
         <div className="pt-40 block md:hidden" id="about-mobile">
           <div className="w-full flex justify-center mb-16">
-            <img src={aboutTitle} alt="" className="scale-125" />
+            <img src={aboutTitle} alt="Handwritten title - About." className="scale-125" />
           </div>
           <About openModal={openModal} />
         </div>

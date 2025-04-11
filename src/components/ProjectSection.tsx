@@ -3,6 +3,7 @@ import Card from "./Card";
 import axios from "axios";
 
 type Image = {
+  id: string;
   img: string;
   url: string;
 };
@@ -19,8 +20,6 @@ type ImgObject = {
 const ProjectSection = ({tag}:{tag:string}) => {
   const [images, setImages] = useState<Image[]>([]);
 
-  console.log(images);
-
   useEffect(() => {
     axios
       .get(`${import.meta.env.VITE_BACKEND_URL}api/images/by-tag?tag=${tag}`)
@@ -29,7 +28,10 @@ const ProjectSection = ({tag}:{tag:string}) => {
           a.public_id.localeCompare(b.public_id)
         );
 
+        console.log(sortedImages)
+
         const mappedImages: Image[] = sortedImages.map((imgObj) => ({
+          id: imgObj.public_id.slice(0, -7).replace(/_/g, " "),
           img: imgObj.image_url,
           url: imgObj.metadata.link_to,
         }));
@@ -42,7 +44,7 @@ const ProjectSection = ({tag}:{tag:string}) => {
   return (
     <div className="flex flex-wrap justify-center gap-10">
       {images.map((obj, i) => (
-        <Card key={i} imgUrl={obj.img} link={obj.url} className="" />
+        <Card key={i} imgId={obj.id} imgUrl={obj.img} link={obj.url} className="" />
       ))}
     </div>
   );
