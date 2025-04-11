@@ -24,8 +24,6 @@ const ProjectSection = ({tag}:{tag:string}) => {
     axios
       .get(`${import.meta.env.VITE_BACKEND_URL}api/images/by-tag?tag=${tag}`)
       .then((res) => {
-        console.log(res.data.images)
-
         const sortedImages: ImgObject[] = res.data.images.sort((a: ImgObject, b: ImgObject) =>
           a.public_id.localeCompare(b.public_id)
         );
