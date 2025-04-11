@@ -27,7 +27,6 @@ const ProjectSection = ({tag}:{tag:string}) => {
         const sortedImages: ImgObject[] = res.data.images.sort((a: ImgObject, b: ImgObject) =>
           a.public_id.localeCompare(b.public_id)
         );
-
         console.log(sortedImages)
 
         const mappedImages: Image[] = sortedImages.map((imgObj) => ({
