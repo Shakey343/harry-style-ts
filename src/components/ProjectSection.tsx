@@ -24,10 +24,11 @@ const ProjectSection = ({tag}:{tag:string}) => {
     axios
       .get(`${import.meta.env.VITE_BACKEND_URL}api/images/by-tag?tag=${tag}`)
       .then((res) => {
+        console.log(res.data.images)
+
         const sortedImages: ImgObject[] = res.data.images.sort((a: ImgObject, b: ImgObject) =>
           a.public_id.localeCompare(b.public_id)
         );
-        console.log(sortedImages)
 
         const mappedImages: Image[] = sortedImages.map((imgObj) => ({
           id: imgObj.public_id.slice(0, -7).replace(/_/g, " "),
