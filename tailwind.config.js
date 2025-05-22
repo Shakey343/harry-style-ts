@@ -12,7 +12,8 @@ export default {
         bone2: "#fff9eb",
         night: "#161619",
         persian: "#B83C3B",
-        tangerine: "#F5A58C"
+        tangerine: "#F5A58C",
+        lightTangerine: "#F4A17C"
       },
       fontFamily: {
         serif: ['Nepomuk', 'serif'],

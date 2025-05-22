@@ -6,6 +6,7 @@ type Image = {
   id: string;
   img: string;
   url: string;
+  subtitle: string;
 };
 
 type ImgObject = {
@@ -13,6 +14,7 @@ type ImgObject = {
   image_url: string;
   metadata: {
     link_to: string;
+    subtitle: string;
   };
   tags: string[];
 };
@@ -32,6 +34,7 @@ const ProjectSection = ({tag}:{tag:string}) => {
           id: imgObj.public_id.slice(0, -7).replace(/_/g, " "),
           img: imgObj.image_url,
           url: imgObj.metadata.link_to,
+          subtitle: imgObj.metadata.subtitle
         }));
 
         setImages(mappedImages);
@@ -42,7 +45,7 @@ const ProjectSection = ({tag}:{tag:string}) => {
   return (
     <div className="flex flex-wrap justify-center gap-10">
       {images.map((obj, i) => (
-        <Card key={i} imgId={obj.id} imgUrl={obj.img} link={obj.url} className="" />
+        <Card key={i} imgId={obj.id} imgUrl={obj.img} link={obj.url} subtitle={obj.subtitle} className="" />
       ))}
     </div>
   );
