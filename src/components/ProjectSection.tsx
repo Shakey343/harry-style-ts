@@ -92,6 +92,7 @@ const ProjectSection = ({ tag }: { tag: Section }) => {
     const stripClass = "flex shrink-0 gap-4 p-2";
     const detail = (
       <motion.div
+        key={selected.slug}
         layoutId={"tile-" + selected.slug}
         className="h-[calc(100dvh-6rem)] min-w-0 flex-1 overflow-hidden"
       >
