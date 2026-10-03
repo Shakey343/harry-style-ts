@@ -40,7 +40,7 @@ more-projects/
     ...
 ```
 
-- A project is a direct subfolder of a section folder. Its `slug` is the folder name without the number prefix (`01-shantify` -> `shantify`).
+- A project is a direct subfolder of a section folder. Its `slug` is the folder name without the number prefix, lower-cased (`01-Shantify` -> `shantify`). Folder names are never suffix-stripped, so `01-rock_castle` -> `rock_castle`.
 - The cover is the image named `cover` (case-insensitive). Required.
 - Photos are all other images in the folder; audio is any `.mp3` (stored by Cloudinary as resource type `video`).
 
@@ -49,7 +49,7 @@ more-projects/
 | Field | Required | Notes |
 | --- | --- | --- |
 | `title` | yes | Project is skipped without it |
-| `description` | no | Shown on hover/over the cover; empty if missing |
+| `description` | no | Shown on hover/over the cover; omitted if missing |
 | `blurb` | no | Longer text in the detail view |
 | `link_to` | no | Makes the cover a link (exposed as `link`) |
 | `soundcloud` | no | SoundCloud URL, rendered as the official widget |
@@ -60,13 +60,13 @@ Photos take an optional `alt` field; the fallback is `"<title>, photo <n>"`.
 ### Ordering and names
 
 - Projects, photos and audio sort by leading integer prefix (`01-`, `2-`, `10-`) ascending; unnumbered items come after, alphabetically. Prefix regex: `^(\d+)[-_ ]`.
-- Before reading a name, the folder path and an optional Cloudinary random suffix (`_[a-z0-9]{6}$`, e.g. `cover_ab12cd` -> `cover`) are stripped.
+- Before reading a name, the folder path and an optional Cloudinary random suffix (`_[a-z0-9]{6}$`, e.g. `cover_ab12cd` -> `cover`) are stripped from asset names (never folder names).
 - Audio display name: prefix/suffix stripped, dashes/underscores become spaces, sentence case (`sea-shanty-medley` -> `Sea shanty medley`).
 
 ### Skip rules
 
 - Project folder with no cover, or a cover with no `title`: skipped with a logged warning on the API.
-- Other file types (video, non-mp3 audio, documents) and nested sub-subfolders: ignored.
+- Other file types (video, non-mp3 audio), PDFs (even though Cloudinary stores them as images) and nested sub-subfolders: ignored.
 
 ### API shape
 
@@ -100,5 +100,4 @@ The API caches each section for 10 minutes and de-duplicates in-flight requests.
 ### Known limitations and open questions
 
 - **Fixed vs dynamic folders (unconfirmed):** the API assumes Cloudinary fixed folders (search `folder:"<section>/*"`). If the account uses dynamic folders, `lib/cloudinary.js` in `api-harry-style` must switch to `asset_folder`.
-- **Folder names ending in `_` + 6 letters/digits** (e.g. `01-rock_castle`) currently have that part stripped as if it were a Cloudinary random suffix. Avoid such names (fix pending).
 - **Blurb line breaks:** unverified whether the Media Library preserves them. The detail view renders with `white-space: pre-line`.

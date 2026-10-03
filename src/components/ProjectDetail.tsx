@@ -1,5 +1,6 @@
 import { useId } from "react";
 import type { Project } from "../types/project";
+import cloudinaryUrl from "../utils/cloudinaryUrl";
 import AudioPlayer from "./media/AudioPlayer";
 import InstagramEmbed from "./media/InstagramEmbed";
 import PhotoGrid from "./media/PhotoGrid";
@@ -16,7 +17,7 @@ const ProjectDetail = ({ project, onClose, closeButtonRef }: ProjectDetailProps)
   const { cover, title, description, blurb, link, photos, audio, soundcloud, instagram } = project;
 
   const coverImage = (
-    <img src={cover.url} alt={cover.alt} className="h-full w-full object-cover" />
+    <img src={cloudinaryUrl(cover.url, 'f_auto,q_auto')} alt={cover.alt} className="h-full w-full object-cover" />
   );
 
   return (

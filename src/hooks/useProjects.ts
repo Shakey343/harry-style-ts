@@ -20,8 +20,14 @@ export function useProjects(section: Section): {
       )
       .then((res) => {
         if (cancelled) return
-        setProjects(res.data.projects)
-        setStatus('ready')
+        const data = res.data?.projects
+        if (Array.isArray(data)) {
+          setProjects(data)
+          setStatus('ready')
+        } else {
+          setProjects([])
+          setStatus('error')
+        }
       })
       .catch(() => {
         if (cancelled) return

@@ -126,7 +126,12 @@ const ProjectSection = ({ tag }: { tag: Section }) => {
 
   return (
     <LayoutGroup id={tag}>
-      <div ref={sectionRef} onKeyDown={handleKeyDown} className="scroll-mt-12">
+      <div
+        ref={sectionRef}
+        tabIndex={-1}
+        onKeyDown={handleKeyDown}
+        className="scroll-mt-12 focus:outline-none"
+      >
         {renderContent()}
       </div>
     </LayoutGroup>
