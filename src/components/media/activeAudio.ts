@@ -6,3 +6,9 @@ export const claimPlayback = (el: HTMLAudioElement): void => {
   }
   active = el;
 };
+
+export const releasePlayback = (el: HTMLAudioElement): void => {
+  if (active === el) {
+    active = null;
+  }
+};

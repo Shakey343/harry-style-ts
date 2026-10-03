@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useBackgroundVideo } from "../../context/BackgroundVideoContext";
 import type { Track } from "../../types/project";
-import { claimPlayback } from "./activeAudio";
+import { claimPlayback, releasePlayback } from "./activeAudio";
 
 const AudioPlayer = ({ track }: { track: Track }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -36,6 +36,8 @@ const AudioPlayer = ({ track }: { track: Track }) => {
       el.removeEventListener("pause", onPause);
       el.removeEventListener("ended", onEnded);
       el.removeEventListener("timeupdate", onTimeUpdate);
+      el.pause();
+      releasePlayback(el);
     };
   }, []);
 
@@ -50,7 +52,12 @@ const AudioPlayer = ({ track }: { track: Track }) => {
     }
     claimPlayback(el);
     mute();
-    void el.play();
+    el.play()?.catch((err: unknown) => {
+      const name = err instanceof Error ? err.name : "UnknownError";
+      if (name !== "AbortError") {
+        console.warn(`Could not play "${track.name}": ${name}`);
+      }
+    });
   };
 
   return (
