@@ -57,7 +57,7 @@ const Homepage = () => {
           internationally to work on a variety of new writing projects starting
           from first draft presentations to full-scale productions of
           established musicals in the musical theatre canon." />
-        <meta property="og:image" content="https://www.dropbox.com/scl/fi/lczazu2li9f69huusci7x/Harry-Style-Headshot-Left.jpg?rlkey=j6ytrxab2woj8a33rqodjx3iy&st=510e0vk1&raw=1" />
+        <meta property="og:image" content="https://res.cloudinary.com/dlaso8l44/image/upload/v1744223578/Harry_Style_Headshot_Left_ulqt4z.jpg" />
         <meta property="og:url" content="https://www.harrystyle.co.uk" />
 
         {/* Twitter Card */}
@@ -68,7 +68,7 @@ const Homepage = () => {
           internationally to work on a variety of new writing projects starting
           from first draft presentations to full-scale productions of
           established musicals in the musical theatre canon." />
-        <meta name="twitter:image" content="https://www.dropbox.com/scl/fi/lczazu2li9f69huusci7x/Harry-Style-Headshot-Left.jpg?rlkey=j6ytrxab2woj8a33rqodjx3iy&st=510e0vk1&raw=1" />
+        <meta name="twitter:image" content="https://res.cloudinary.com/dlaso8l44/image/upload/v1744223578/Harry_Style_Headshot_Left_ulqt4z.jpg" />
       </Helmet>
       {showPlayBtn && (
         <div className="fixed top-0 h-full w-full bg-night z-50 overflow-hidden">
