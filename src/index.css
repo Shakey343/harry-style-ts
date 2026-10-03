@@ -51,3 +51,22 @@ select:-webkit-autofill:focus {
   transition: background-color 5000s ease-in-out 0s;
   color: white;
 }
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0) rotate(-1deg) }
+  50% { transform: translateY(-6px) rotate(1deg) }
+}
+
+.tile-bob {
+  animation: bob 4s ease-in-out infinite;
+}
+
+.group:hover .tile-bob {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile-bob {
+    animation: none;
+  }
+}

@@ -21,15 +21,17 @@ const ProjectDetail = ({ project, onClose, closeButtonRef }: ProjectDetailProps)
 
   return (
     <section aria-labelledby={titleId} className="relative h-full overflow-y-auto bg-bone text-night">
-      <button
-        ref={closeButtonRef}
-        type="button"
-        aria-label="Close project"
-        onClick={onClose}
-        className="absolute right-4 top-4 z-10 cursor-pointer rounded bg-night/70 px-3 py-2 text-bone hover:text-tangerine focus:outline-none focus-visible:ring-2 focus-visible:ring-tangerine"
-      >
-        ✕
-      </button>
+      <div className="sticky top-4 z-10 flex h-0 justify-end pr-4">
+        <button
+          ref={closeButtonRef}
+          type="button"
+          aria-label="Close project"
+          onClick={onClose}
+          className="h-fit cursor-pointer rounded bg-night/70 px-3 py-2 text-bone hover:text-tangerine focus:outline-none focus-visible:ring-2 focus-visible:ring-tangerine"
+        >
+          ✕
+        </button>
+      </div>
       <header className="relative h-64 w-full md:h-96">
         {link ? (
           <a
