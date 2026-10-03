@@ -10,13 +10,14 @@ import ProjectSection from "./ProjectSection";
 import About from "./About";
 import Footer from "./Footer";
 import Modal from "./Modal";
+import { useBackgroundVideo } from "../context/BackgroundVideoContext";
 import cn from "../utils/cn";
 import Mute from "./icons/Mute";
 import Play from "./icons/Play";
 
 
 const Homepage = () => {
-  const [mute, setMute] = useState(true);
+  const { videoRef, muted, unmute, toggleMute } = useBackgroundVideo();
   const [showPlayBtn, setShowPlayBtn] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -31,25 +32,10 @@ const Homepage = () => {
 
   const handlePlayBtn = () => {
     setShowPlayBtn(false);
-    handleUnmute();
+    unmute();
     setTimeout(() => {
       setLoading(false);
     }, 1000);
-  };
-
-  const handleUnmute = () => {
-    const video = document.querySelector("video");
-    if (!video) {
-      return;
-    }
-    if (video.muted) {
-      video.muted = false;
-      video.play();
-      setMute(false);
-    } else {
-      video.muted = true;
-      setMute(true);
-    }
   };
 
   return (
@@ -102,6 +88,7 @@ const Homepage = () => {
         <Navbar openModal={openModal} />
         <div className="h-screen overflow-hidden relative">
           <video
+            ref={videoRef}
             loop
             muted
             playsInline
@@ -124,9 +111,9 @@ const Homepage = () => {
           <button
             className="fixed bottom-20 md:bottom-[57px] left-6 md:left-8 hover:opacity-80"
             type="button"
-            onClick={handleUnmute}
+            onClick={toggleMute}
           >
-            {mute ? (
+            {muted ? (
               <Mute className="text-tangerine md:text-teal" />
             ) : (
               <Play className="text-tangerine md:text-teal" />
