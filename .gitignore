@@ -25,3 +25,11 @@ dist-ssr
 
 .env*
 .env*
+
+# Superpowers brainstorming companion
+.superpowers/
+
+# Tests are kept local-only for now
+*.test.ts
+*.test.tsx
+src/test/
