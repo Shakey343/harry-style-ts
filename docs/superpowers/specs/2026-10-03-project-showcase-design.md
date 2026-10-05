@@ -3,6 +3,7 @@
 **Date:** 2026-10-03
 **Repos:** `harry-style` (frontend), `api-harry-style` (backend)
 **Branch (both repos):** `feature/project-showcase`
+**Revised:** 2026-10-05, to match the implementation: dynamic folders confirmed, built-in Title/Description fields, cache hardening, sanitized logging, PDFs ignored.
 
 ## Goal
 
@@ -19,7 +20,7 @@ Turn each project on the homepage from a single linked image into a rich, expand
 
 ### Assumptions
 
-- Harry's Cloudinary account uses **fixed folders** (public IDs include the folder path). To be confirmed; if it uses dynamic folders, only `lib/cloudinary.js` changes (`asset_folder` instead of `folder`).
+- Harry's Cloudinary account uses **dynamic folders** (confirmed 2026-10-05 against the live account). Each asset carries an `asset_folder` and a Media Library `display_name`. Its `public_id` is an opaque upload id that contains no folder path.
 - The Theatre and More Projects sections remain as they are.
 - Harry is non-technical; conventions must be learnable from a one-page guide.
 
@@ -28,8 +29,8 @@ Turn each project on the homepage from a single linked image into a rich, expand
 ```
 theatre/
   01-shantify/
-    cover.jpg            ← context metadata: title, description, blurb, link_to, soundcloud, instagram
-    01-rehearsal.jpg     ← optional context metadata: alt
+    cover.jpg            ← metadata: Title, Description (built-in), blurb, link_to, soundcloud, instagram
+    01-rehearsal.jpg     ← optional built-in Description (used as alt text)
     02-opening-night.jpg
     sea-shanty-medley.mp3
   02-pippin/
@@ -42,16 +43,20 @@ more-projects/
 Rules (all implemented in `buildProjects`):
 
 - **Sections** are the top-level folders `theatre` and `more-projects`.
-- **A project** is a direct subfolder of a section folder. Its `slug` is the folder name without its number prefix (`01-shantify` → `shantify`).
-- **Names**: before interpreting any asset name, strip the folder path and an optional Cloudinary random suffix matching `_[a-z0-9]{6}$` (`cover_ab12cd` → `cover`).
+- **A project** is an asset folder exactly one level below a section folder (`asset_folder` = `<section>/<name>`). Its `slug` is the folder name without its number prefix, lower-cased (`01-Shantify` → `shantify`). Folder names are used as typed: `01-rock_castle` → `rock_castle`.
+- **Names**: an asset's name is its `display_name` (what Harry sees and renames in the Media Library) with a known file extension removed (`cover.jpg` → `cover`). If `display_name` is missing, the last segment of `public_id` is used. No random-suffix stripping is applied.
 - **Ordering** (projects and photos alike): by leading integer prefix (`01-`, `2-`, `10-`) ascending; items with no prefix come after all numbered items, sorted alphabetically.
 - **Cover**: the image whose name is `cover` (case-insensitive). Required.
-- **Metadata**: Cloudinary context fields on the cover: `title` (required), `description`, `blurb`, `link_to`, `soundcloud`, `instagram`. All but `title` optional.
-- **Photos**: every other image in the folder. Optional `alt` context field; fallback alt is `"<title>, photo <n>"`.
-- **Audio**: assets with format `mp3` (Cloudinary stores these under resource type `video`). Display name derived from the filename: strip prefix/suffix, dashes/underscores → spaces, sentence case (`sea-shanty-medley` → `Sea shanty medley`). Ordered like photos.
-- **Ignored**: any other file types (video, non-mp3 audio, documents), and nested sub-subfolders.
-- **Skipped with a logged warning**: a project folder with no cover, or a cover with no `title`. A missing `description` is rendered as empty.
-- **Blurb line breaks**: preserved if the Media Library keeps them. To verify in the first implementation step; if not, a blank line or `|` in the field separates paragraphs.
+- **Metadata**: Cloudinary context fields on the cover.
+    - **Title** (required): a custom `title` field, or else the Media Library's built-in **Title** (stored as `caption`).
+    - **Description**: a custom `description` field, or else the built-in **Description** (stored as `alt`).
+    - **Custom fields**: `blurb`, `link_to`, `soundcloud`, `instagram`.
+    - All except the title are optional.
+- **Photos**: every other image in the folder. The photo's built-in Description (`alt`) is its alt text; the fallback alt is `"<title>, photo <n>"`.
+- **Audio**: assets with format `mp3` (Cloudinary stores these under resource type `video`). Display name derived from the asset name: number prefix removed, dashes/underscores → spaces, sentence case (`02-sea-shanty-medley.mp3` → `Sea shanty medley`). Ordered like photos.
+- **Ignored**: any other file types (video, non-mp3 audio), PDFs (which Cloudinary stores as resource type `image`, so they're excluded by format), and nested sub-subfolders.
+- **Skipped with a logged warning**: a project folder with no cover, or a cover with no title. A missing description is omitted.
+- **Blurb line breaks**: rendered with `white-space: pre-line`. Still unverified whether the Media Library preserves them. If it doesn't, a follow-up adds a `|` paragraph separator.
 
 ## 2. Backend (`api-harry-style`)
 
@@ -87,10 +92,16 @@ Optional fields absent from the source are omitted; `photos` and `audio` are alw
 
 `index.js` is split into focused units:
 
-- `lib/cloudinary.js`: `searchSection(section)` runs a Cloudinary Search API query (`folder:<section>/*`, `with_field: ["context","tags"]`, `max_results: 500`), following `next_cursor` until exhausted. Returns raw resources.
-- `lib/buildProjects.js`: `buildProjects(section, resources)` is a **pure** function that applies every rule in section 1 and returns the `projects` array.
-- `lib/cache.js`: `createCache({ ttlMs, fetcher })` → `get(key)`. Serves cached values for 10 minutes; refetches after expiry; if a refetch throws and a stale value exists, returns the stale value (logs the error); if nothing is cached, rethrows.
-- `index.js`: wires the route, exports `app` (listens only when run directly) so tests can start it on an ephemeral port.
+- `lib/cloudinary.js`: `searchSection(section, deps)` runs a Cloudinary Search API query (`asset_folder:"<section>/*"`, `with_field: ["context","tags"]`, `max_results: 500`), following `next_cursor` until exhausted. Returns raw resources.
+- `lib/buildProjects.js`: `buildProjects(section, resources, logger)` is a **pure** function that applies every rule in section 1 and returns the `projects` array.
+- `lib/cache.js`: `createCache({ ttlMs, fetcher, retryAfterMs = 60s })` → `get(key)`. It behaves as follows:
+    - Serves cached values for 10 minutes and refetches after expiry.
+    - Concurrent `get`s for the same key share one in-flight fetch.
+    - If a refetch throws and a stale value exists, it returns the stale value, logs the error, and doesn't call Cloudinary again for that key for 60 seconds. This protects the ~500 calls/hour rate limit.
+    - If nothing is cached, it rethrows.
+- `lib/describeError.js`: turns an error into `message (status N)` for logs. Raw axios errors are never logged, because their request config contains the Cloudinary API key and secret.
+- `app.js`: `createApp({ getProjects, cloudinary })` builds the Express app (the new route plus the two legacy routes), so tests inject a fake `getProjects`.
+- `index.js`: loads `.env`, wires the real search + cache into `createApp`, and listens.
 
 ### Errors
 
@@ -129,14 +140,15 @@ The existing `/api/images/by-tag` endpoint is kept unchanged until the new front
 - **Mobile (< md)**: both strips merge into one horizontally scrolling row above the detail, in original order.
 - **Reduced motion**: no bobbing; layout changes are instant.
 - **Accessibility**: tiles are `<button>`s with `aria-expanded`; the detail is a region labelled by the project title.
-- **Loading**: placeholder tiles. **Error**: a quiet "Projects unavailable right now" line in the section.
+- **Loading**: placeholder tiles. **Error**: a quiet "Projects unavailable right now" line in the section. A response without a `projects` array also counts as an error (e.g. a misconfigured `VITE_BACKEND_URL` returning `index.html`).
+- **Escape** works while focus is anywhere in the open section (the section wrapper is focusable with `tabIndex={-1}`). The detail remounts on every swap (`key={slug}`), so shared-layout animations and scroll position reset.
 
 ### Project detail (top to bottom; each block only if data exists)
 
-1. **Header**: full-width cover with title and description over a dark gradient. If `link` exists, the cover is a link (`target="_blank" rel="noopener noreferrer"`) with a small ↗ indicator.
+1. **Header**: full-width cover (`f_auto,q_auto`) with title and description over a dark gradient. The ✕ stays visible while the detail scrolls. If `link` exists, the cover is a link (`target="_blank" rel="noopener noreferrer"`) with a small ↗ indicator.
 2. **Blurb**: serif font, `white-space: pre-line`.
 3. **Photos**: responsive grid of Cloudinary-resized thumbnails in order. Clicking opens the **Lightbox**: full-screen night overlay, the image at full resolution, ‹ › buttons, arrow keys and swipe navigate (wrapping), an "n / total" counter, and ✕, Escape or a backdrop click to close. Focus is trapped while open and restored on close.
-4. **Audio**: one compact teal/tangerine player per MP3 (play/pause, progress bar, track name). Only one track plays at a time across the page. Starting a track mutes the homepage background video and updates its mute icon.
+4. **Audio**: one compact teal/tangerine player per MP3 (play/pause, progress bar, track name). Only one track plays at a time across the page. Starting a track mutes the homepage background video and updates its mute icon. A rejected `play()` is caught: `AbortError` is ignored, other errors are logged as warnings, and the video stays muted. Closing or swapping a project pauses and releases its players.
 5. **SoundCloud**: official widget iframe built from the pasted URL.
 6. **Instagram**: official post embed; `embed.js` is loaded lazily the first time a project with an Instagram URL opens.
 
@@ -156,8 +168,9 @@ The mute state in `Homepage.tsx` is lifted into a small context (`BackgroundVide
 
 **Backend** (Node built-in `node:test`, no new dependencies; Cloudinary mocked):
 
-- `buildProjects`: grouping, prefix ordering, suffix stripping, cover detection, skip rules, MP3 detection, ignored types, alt fallback, audio naming.
-- `cache`: hit within TTL, refetch after TTL, stale on error, rethrow with nothing cached.
+- `buildProjects`: dynamic-folder grouping, prefix ordering, `display_name` naming (incl. a regression test from the real Shantify asset), cover detection, built-in Title/Description fallback, skip rules, MP3 detection, ignored types incl. PDFs, alt fallback, audio naming.
+- `cache`: hit within TTL, refetch after TTL, stale on error, rethrow with nothing cached, in-flight dedupe, failure back-off, synchronous fetcher throws.
+- `describeError`: no credential substrings in output.
 - Route: 400 on bad section; response shape with mocked search.
 
 **Frontend** (Vitest, React Testing Library, jsdom as dev dependencies):
@@ -168,19 +181,21 @@ The mute state in `Homepage.tsx` is lifted into a small context (`BackgroundVide
 - `Lightbox`: open, navigate, wrap-around, close, focus restore.
 - `AudioPlayer`: single active track; mutes the background video.
 
+Test files are **git-ignored and kept local-only** (owner's decision, 2026-10-03).
+
 **Manual checks** (dev server, before completion): motion feel, mobile layout, reduced motion, real SoundCloud and Instagram embeds, favicon in the browser tab.
 
 ## 6. Rollout
 
 1. Deploy the backend (additive).
-2. Harry migrates content: creates the section and project folders; each existing tagged image becomes that project's `cover`; `subtitle` moves to `description`.
+2. Harry migrates content: creates the section and project folders; each existing tagged image becomes that project's `cover`; its old `subtitle` text goes into the built-in Description and the project name into the built-in Title.
 3. Deploy the frontend.
 4. Follow-up: remove `/api/images/by-tag`.
 
 ## 7. Documentation deliverables
 
 - **Frontend README**: "Managing projects" section with the convention, field reference and API shape.
-- **Shareable guide for Harry**: a plain-language "How to add or edit a project" doc covering folder layout, numbering, metadata fields and what happens when something is missing. Written once the implementation is final.
+- **Shareable guide for Harry**: a plain-language "How to add or edit a project" doc covering folder layout, numbering, metadata fields and what happens when something is missing. Written 2026-10-05 as a Claude Doc.
 
 ## Out of scope
 
