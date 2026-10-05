@@ -29,7 +29,7 @@ Harry manages projects entirely in the Cloudinary Media Library; no code changes
 ```
 theatre/
   01-shantify/
-    cover.jpg            <- context metadata: title, description, blurb, link_to, soundcloud, instagram
+    cover.jpg            <- metadata: Title, Description, blurb, link_to, soundcloud, instagram
     01-rehearsal.jpg     <- optional context metadata: alt
     02-opening-night.jpg
     sea-shanty-medley.mp3
@@ -48,20 +48,20 @@ more-projects/
 
 | Field | Required | Notes |
 | --- | --- | --- |
-| `title` | yes | Project is skipped without it |
-| `description` | no | Shown on hover/over the cover; omitted if missing |
+| `title` | yes | The Media Library's built-in **Title** field (stored as `caption`) works; a custom `title` field wins if both are set. Project is skipped without one |
+| `description` | no | The built-in **Description** field (stored as `alt`) works; a custom `description` field wins. Shown on hover/over the cover; omitted if missing |
 | `blurb` | no | Longer text in the detail view |
 | `link_to` | no | Makes the cover a link (exposed as `link`) |
 | `soundcloud` | no | SoundCloud URL, rendered as the official widget |
 | `instagram` | no | Instagram post URL, embedded |
 
-Photos take an optional `alt` field; the fallback is `"<title>, photo <n>"`.
+Photos use their built-in **Description** (`alt`) as alt text; the fallback is `"<title>, photo <n>"`.
 
 ### Ordering and names
 
 - Projects, photos and audio sort by leading integer prefix (`01-`, `2-`, `10-`) ascending; unnumbered items come after, alphabetically. Prefix regex: `^(\d+)[-_ ]`.
-- Before reading a name, the folder path and an optional Cloudinary random suffix (`_[a-z0-9]{6}$`, e.g. `cover_ab12cd` -> `cover`) are stripped from asset names (never folder names).
-- Audio display name: prefix/suffix stripped, dashes/underscores become spaces, sentence case (`sea-shanty-medley` -> `Sea shanty medley`).
+- The Cloudinary account uses **dynamic folders**: the API searches `asset_folder:"<section>/*"` and reads each file's name from its Media Library `display_name` (file extension removed), falling back to the last `public_id` segment. Renaming a file in the Media Library is enough; the `public_id` doesn't matter.
+- Audio display name: number prefix removed, dashes/underscores become spaces, sentence case (`02-sea-shanty-medley.mp3` -> `Sea shanty medley`).
 
 ### Skip rules
 
@@ -99,5 +99,4 @@ The API caches each section for 10 minutes and de-duplicates in-flight requests.
 
 ### Known limitations and open questions
 
-- **Fixed vs dynamic folders (unconfirmed):** the API assumes Cloudinary fixed folders (search `folder:"<section>/*"`). If the account uses dynamic folders, `lib/cloudinary.js` in `api-harry-style` must switch to `asset_folder`.
 - **Blurb line breaks:** unverified whether the Media Library preserves them. The detail view renders with `white-space: pre-line`.
