@@ -33,3 +33,6 @@ dist-ssr
 *.test.ts
 *.test.tsx
 src/test/
+
+# Local Claude Code settings
+.claude/settings.local.json
