@@ -24,6 +24,7 @@ const Homepage = () => {
   const [interacted, setInteracted] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const soundButtonRef = useRef<HTMLButtonElement>(null);
+  const heroTitleRef = useRef<HTMLDivElement>(null);
 
   // Browsers only allow sound after the visitor interacts, so the video starts
   // muted and the first click or Enter/Space anywhere turns the sound on.
@@ -103,7 +104,7 @@ const Homepage = () => {
         <meta name="twitter:image" content="https://res.cloudinary.com/dlaso8l44/image/upload/v1744223578/Harry_Style_Headshot_Left_ulqt4z.jpg" />
       </Helmet>
       <div className="relative">
-        <Navbar openModal={openModal} />
+        <Navbar openModal={openModal} heroTitleRef={heroTitleRef} />
         {/* Shorter than the screen so the Theatre title peeks above the fold
             (phones also clear the fixed social bar). */}
         <div className="h-[calc(100svh-24.2rem)] md:h-[calc(100svh-22rem)] relative">
@@ -151,6 +152,7 @@ const Homepage = () => {
             )}
           </div>
           <div
+            ref={heroTitleRef}
             className={cn(
               "absolute left-1/2 -translate-x-1/2 transition-all duration-1000 ease-in-out",
               loading

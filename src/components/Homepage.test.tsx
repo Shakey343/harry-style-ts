@@ -4,6 +4,7 @@ import { describe, it, expect, vi } from "vitest";
 import { HelmetProvider } from "react-helmet-async";
 import Homepage from "./Homepage";
 import { BackgroundVideoProvider } from "../context/BackgroundVideoContext";
+import { setInView } from "../test/intersectionObserver";
 
 vi.mock("./ProjectSection", () => ({ default: () => null }));
 
@@ -108,5 +109,19 @@ describe("Homepage landing", () => {
     act(() => vi.advanceTimersByTime(1));
     expect(title.className).not.toBe(start);
     vi.useRealTimers();
+  });
+
+  it("on phones the bar's HS logo appears only once the hero title has scrolled away", () => {
+    const { container } = renderHomepage();
+    const title =
+      container.querySelector<HTMLElement>("img.mb-4")!.parentElement!
+        .parentElement!;
+    const phoneLogo = () =>
+      screen
+        .queryAllByAltText("Handwritten logo of Harry's initials - HS")
+        .filter(img => img.closest("a")?.classList.contains("md:hidden"));
+    expect(phoneLogo()).toHaveLength(0);
+    setInView(title, false);
+    expect(phoneLogo()).toHaveLength(1);
   });
 });

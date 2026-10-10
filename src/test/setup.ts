@@ -1,5 +1,6 @@
 import "@testing-library/jest-dom/vitest";
 import { vi } from "vitest";
+import { installIntersectionObserver } from "./intersectionObserver";
 
 Object.defineProperty(HTMLMediaElement.prototype, "play", {
   configurable: true,
@@ -28,3 +29,5 @@ Object.defineProperty(window, "matchMedia", {
 });
 
 Element.prototype.scrollIntoView = vi.fn();
+
+installIntersectionObserver();
