@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
 import { useBackgroundVideo } from "../../context/BackgroundVideoContext";
-import { claimPlayback, releasePlayback, type Pausable } from "./activeAudio";
+import { claimPlayback, releasePlayback, type Pausable } from "./activePlayback";
 
 // Returns the callback an embed calls when it starts playing: it mutes the
 // background video and pauses any other player. `pause` stops this embed when

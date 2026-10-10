@@ -1,7 +1,7 @@
 import { renderHook, act } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import useEmbedPlayback from "./useEmbedPlayback";
-import { claimPlayback, releasePlayback } from "./activeAudio";
+import { claimPlayback, releasePlayback } from "./activePlayback";
 
 const mute = vi.fn();
 vi.mock("../../context/BackgroundVideoContext", () => ({

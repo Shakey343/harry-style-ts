@@ -26,6 +26,19 @@ describe("Homepage landing", () => {
     expect(video.muted).toBe(true);
   });
 
+  it("loads the optimised Cloudinary MP4 first, with Dropbox as the fallback", () => {
+    const { container } = renderHomepage();
+    const sources = [...container.querySelectorAll("video source")];
+    expect(sources.map(s => s.getAttribute("type"))).toEqual([
+      "video/mp4",
+      "video/mp4",
+    ]);
+    expect(sources[0].getAttribute("src")).toMatch(
+      /^https:\/\/res\.cloudinary\.com\/.*\/q_auto\/.*\.mp4$/
+    );
+    expect(sources[1].getAttribute("src")).toContain("dropbox.com");
+  });
+
   it("explicitly starts muted playback on mount (iOS ignores React's muted prop)", () => {
     const play = vi.mocked(HTMLMediaElement.prototype.play);
     play.mockClear();

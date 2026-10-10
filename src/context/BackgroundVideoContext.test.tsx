@@ -5,7 +5,7 @@ import {
   BackgroundVideoProvider,
   useBackgroundVideo,
 } from "./BackgroundVideoContext";
-import { claimPlayback } from "../components/media/activeAudio";
+import { claimPlayback } from "../components/media/activePlayback";
 
 const wrapper = ({ children }: { children: ReactNode }) => (
   <BackgroundVideoProvider>{children}</BackgroundVideoProvider>

@@ -8,7 +8,7 @@ import {
   type ReactNode,
   type RefObject,
 } from "react";
-import { pauseActivePlayback } from "../components/media/activeAudio";
+import { pauseActivePlayback } from "../components/media/activePlayback";
 
 interface BackgroundVideoValue {
   videoRef: RefObject<HTMLVideoElement>;

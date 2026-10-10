@@ -4,7 +4,7 @@ import SoundCloudEmbed from "./SoundCloudEmbed";
 import YouTubeEmbed from "./YouTubeEmbed";
 import SpotifyEmbed from "./SpotifyEmbed";
 import InstagramEmbed from "./InstagramEmbed";
-import { claimPlayback } from "./activeAudio";
+import { claimPlayback } from "./activePlayback";
 
 const mute = vi.fn();
 vi.mock("../../context/BackgroundVideoContext", () => ({

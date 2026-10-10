@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useBackgroundVideo } from "../../context/BackgroundVideoContext";
 import type { Track } from "../../types/project";
-import { claimPlayback, releasePlayback } from "./activeAudio";
+import { claimPlayback, releasePlayback } from "./activePlayback";
 
 const AudioPlayer = ({ track }: { track: Track }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
