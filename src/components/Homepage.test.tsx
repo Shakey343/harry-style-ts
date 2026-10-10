@@ -60,9 +60,11 @@ describe("Homepage landing", () => {
     vi.useFakeTimers();
     const { container } = renderHomepage();
     const title = container.querySelector('img[src*="harry-style"]')!.closest("div.absolute")!;
-    expect(title.className).toContain("top-1/2");
-    act(() => vi.advanceTimersByTime(1000));
-    expect(title.className).not.toContain("top-1/2");
+    const start = title.className;
+    act(() => vi.advanceTimersByTime(999));
+    expect(title.className).toBe(start);
+    act(() => vi.advanceTimersByTime(1));
+    expect(title.className).not.toBe(start);
     vi.useRealTimers();
   });
 });

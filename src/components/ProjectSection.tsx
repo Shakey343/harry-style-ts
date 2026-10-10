@@ -8,10 +8,6 @@ import ProjectTile from "./ProjectTile";
 import ProjectDetail from "./ProjectDetail";
 
 const PLACEHOLDER_COUNT = 3;
-// The open panel must fit below the fixed navbar (88px desktop, 112px phone)
-// with a gap; on phones the strip of small tiles sits above it and the fixed
-// social bar below it.
-const PANEL_MAX_H = "max-h-[calc(100dvh-20rem)] md:max-h-[calc(100dvh-8rem)]";
 
 const ProjectSection = ({ tag }: { tag: Section }) => {
   const { projects, status } = useProjects(tag);
@@ -98,7 +94,7 @@ const ProjectSection = ({ tag }: { tag: Section }) => {
       <motion.div
         key={selected.slug}
         layoutId={"tile-" + selected.slug}
-        className={`flex ${PANEL_MAX_H} min-w-0 flex-1 flex-col overflow-hidden`}
+        className="min-w-0 flex-1"
       >
         <ProjectDetail project={selected} onClose={reset} closeButtonRef={closeButtonRef} />
       </motion.div>

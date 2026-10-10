@@ -70,3 +70,10 @@ select:-webkit-autofill:focus {
     animation: none;
   }
 }
+
+/* Instagram's embed forces min-width: 326px and sets no width, so it can't fit
+   the project panel on phones. */
+iframe.instagram-media {
+  min-width: 0 !important;
+  width: 100% !important;
+}
