@@ -97,7 +97,7 @@ const Homepage = () => {
         <Navbar openModal={openModal} />
         {/* Shorter than the screen so the Theatre title peeks above the fold
             (phones also clear the fixed social bar). */}
-        <div className="h-[calc(100svh-21rem)] md:h-[calc(100svh-17.5rem)] overflow-hidden relative">
+        <div className="h-[calc(100svh-28rem)] md:h-[calc(100svh-24rem)] relative">
           <video
             ref={videoRef}
             autoPlay
@@ -122,7 +122,7 @@ const Homepage = () => {
 
           <button
             ref={soundButtonRef}
-            className="fixed bottom-20 md:bottom-[57px] left-6 md:left-8 hover:opacity-80"
+            className="fixed z-10 bottom-20 md:bottom-[57px] left-6 md:left-8 hover:opacity-80"
             type="button"
             aria-label={muted ? "Turn sound on" : "Turn sound off"}
             onClick={handleSoundButton}
@@ -135,10 +135,10 @@ const Homepage = () => {
           </button>
           <div
             className={cn(
-              "absolute left-1/2 -translate-x-1/2 transition-all duration-1000 ease-in-out text-",
+              "absolute left-1/2 -translate-x-1/2 transition-all duration-1000 ease-in-out",
               loading
-                ? "top-1/2 -translate-y-1/2 sm:scale-125"
-                : "top-[18%] md:top-[14%] scale-[80%] sm:scale-75"
+                ? "top-2/3 -translate-y-1/2 sm:scale-125"
+                : "top-[32%] md:top-[20%] scale-[80%] sm:scale-75"
             )}
           >
             <div className="text-center text-nowrap text-bone2 md:text-bone drop-shadow-xl">
@@ -157,13 +157,13 @@ const Homepage = () => {
                   MUSICAL DIRECTOR
                 </p>
               </div>
-              {muted && !interacted && (
-                <p className="mt-6 text-lg tracking-wide text-tangerine animate-pulse motion-reduce:animate-none">
-                  Tap anywhere for sound
-                </p>
-              )}
             </div>
           </div>
+          {muted && !interacted && (
+            <p className="absolute left-1/2 -translate-x-1/2 -bottom-4 sm:bottom-0 text-lg tracking-wide text-tangerine animate-pulse motion-reduce:animate-none">
+              Tap anywhere for sound
+            </p>
+          )}
         </div>
 
         <Container className="py-40" id="theatre">

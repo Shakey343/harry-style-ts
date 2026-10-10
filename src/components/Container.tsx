@@ -11,7 +11,7 @@ const Container = ({
   id?: string;
 }) => {
   return (
-    <div className={cn("px-6 md:px-20", className)} id={id}>
+    <div className={cn("px-10 md:px-20", className)} id={id}>
       {children}
     </div>
   );
