@@ -24,7 +24,7 @@ const ProjectDetail = ({ project, onClose, closeButtonRef }: ProjectDetailProps)
   );
 
   return (
-    <section aria-labelledby={titleId} className="relative h-full overflow-y-auto bg-bone text-night">
+    <section aria-labelledby={titleId} className="relative min-h-0 overflow-y-auto bg-bone text-night">
       <div className="sticky top-4 z-10 flex h-0 justify-end pr-4">
         <button
           ref={closeButtonRef}

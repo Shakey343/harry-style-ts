@@ -24,7 +24,9 @@ const ProjectTile = forwardRef<HTMLButtonElement, ProjectTileProps>(
         aria-expanded={false}
         title={isFull ? undefined : title}
         onClick={onSelect}
-        className="group shrink-0 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-tangerine"
+        className={`group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-tangerine ${
+          isFull ? "w-full max-w-xs md:w-auto md:max-w-none" : "shrink-0"
+        }`}
       >
         <div
           className="tile-bob"
@@ -39,7 +41,7 @@ const ProjectTile = forwardRef<HTMLButtonElement, ProjectTileProps>(
               <img
                 src={cloudinaryUrl(cover.url, "w_800,f_auto,q_auto")}
                 alt={cover.alt}
-                className="md:h-full"
+                className="w-full md:h-full md:w-auto"
               />
               {description && (
                 <p className="absolute bottom-0 hidden w-full bg-teal p-4 pb-2 text-left text-bone text-shadow-sm transition-all delay-200 ease-in-out group-hover:block">

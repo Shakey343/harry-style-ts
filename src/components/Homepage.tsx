@@ -86,7 +86,7 @@ const Homepage = () => {
       )}
       <div className="relative">
         <Navbar openModal={openModal} />
-        <div className="h-screen overflow-hidden relative">
+        <div className="h-[calc(100svh-13rem)] md:h-[calc(100svh-9rem)] overflow-hidden relative">
           <video
             ref={videoRef}
             loop
@@ -147,30 +147,30 @@ const Homepage = () => {
           </div>
         </div>
 
-        <Container className="py-40" id="theatre">
+        <Container className="pt-6 pb-40" id="theatre">
           <div className="w-full flex justify-center mb-16">
-            <img src={theatreTitle} alt="Handwritten title - Theatre." className="scale-125" />
+            <img src={theatreTitle} alt="Handwritten title - Theatre." className="md:scale-125" />
           </div>
           <ProjectSection tag="theatre" />
         </Container>
 
         <Container className="py-40" id="projects">
           <div className="w-full flex justify-center mb-16">
-            <img src={moreProjectsTitle} alt="Handwritten title - More Projects." className="scale-125" />
+            <img src={moreProjectsTitle} alt="Handwritten title - More Projects." className="md:scale-125" />
           </div>
           <ProjectSection tag="more-projects" />
         </Container>
 
         <Container className="py-40 hidden md:block" id="about">
           <div className="w-full flex justify-center mb-16">
-            <img src={aboutTitle} alt="Handwritten title - About." className="scale-125" />
+            <img src={aboutTitle} alt="Handwritten title - About." className="md:scale-125" />
           </div>
           <About openModal={openModal} />
         </Container>
 
         <div className="pt-40 block md:hidden" id="about-mobile">
           <div className="w-full flex justify-center mb-16">
-            <img src={aboutTitle} alt="Handwritten title - About." className="scale-125" />
+            <img src={aboutTitle} alt="Handwritten title - About." className="md:scale-125" />
           </div>
           <About openModal={openModal} />
         </div>
