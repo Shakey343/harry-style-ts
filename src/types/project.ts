@@ -12,6 +12,8 @@ export type Project = {
   link?: string | undefined
   soundcloud?: string | undefined
   instagram?: string | undefined
+  spotify?: string | undefined
+  youtube?: string | undefined
   cover: Photo
   photos: Photo[]
   audio: Track[]

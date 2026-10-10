@@ -5,6 +5,8 @@ import AudioPlayer from "./media/AudioPlayer";
 import InstagramEmbed from "./media/InstagramEmbed";
 import PhotoGrid from "./media/PhotoGrid";
 import SoundCloudEmbed from "./media/SoundCloudEmbed";
+import SpotifyEmbed from "./media/SpotifyEmbed";
+import YouTubeEmbed from "./media/YouTubeEmbed";
 
 interface ProjectDetailProps {
   project: Project;
@@ -14,7 +16,8 @@ interface ProjectDetailProps {
 
 const ProjectDetail = ({ project, onClose, closeButtonRef }: ProjectDetailProps) => {
   const titleId = useId();
-  const { cover, title, description, blurb, link, photos, audio, soundcloud, instagram } = project;
+  const { cover, title, description, blurb, link, photos, audio, soundcloud, spotify, youtube, instagram } =
+    project;
 
   const coverImage = (
     <img src={cloudinaryUrl(cover.url, 'f_auto,q_auto')} alt={cover.alt} className="h-full w-full object-cover" />
@@ -65,6 +68,8 @@ const ProjectDetail = ({ project, onClose, closeButtonRef }: ProjectDetailProps)
           </div>
         )}
         {soundcloud && <SoundCloudEmbed url={soundcloud} />}
+        {spotify && <SpotifyEmbed url={spotify} />}
+        {youtube && <YouTubeEmbed url={youtube} />}
         {instagram && <InstagramEmbed url={instagram} />}
       </div>
     </section>
