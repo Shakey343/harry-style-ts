@@ -160,13 +160,13 @@ Invalid embed URLs → that block is not rendered.
 
 **Playback coordination**: one thing plays at a time across MP3s and embeds (`activeAudio.ts` holds the current player). An embed reports that it started playing through its provider's API: SoundCloud Widget `PLAY`, YouTube `onStateChange` PLAYING, Spotify `playback_update` (paused → playing only). That mutes the background video and pauses the previous player; starting an MP3 pauses a playing embed. Instagram has no API: focus moving into its iframe (window `blur`) is treated as playback; it mutes the video but can't be paused. Embed cleanup never touches a removed iframe (SoundCloud's widget throws if unbound after React removes it).
 
-**Layout**: the open panel scrolls to below the fixed navbar and is at most the space between the navbar and (on phones) the small-tile strip and fixed social bar; it shrinks to fit short content. Grid tiles cap at 20rem on phones; there's no horizontal scroll at 375px. The hero is shortened so the Theatre title shows at the bottom of the first screen.
+**Layout**: the open panel scrolls to below the fixed navbar and is exactly as tall as its content (no inner scroll box); the page scrolls, and the ✕ sticks just below the navbar. Instagram's iframe is forced to fit its column (it sets `min-width: 326px` and no width), and the panel clips any horizontal overflow (`overflow-x: clip`, which keeps the ✕ sticky). Grid tiles cap at 20rem on phones; there's no horizontal scroll at 375px. The hero is shortened so the Theatre title shows at the bottom of the first screen.
 
 ### Background video coordination
 
 The mute state in `Homepage.tsx` is lifted into a small context (`BackgroundVideoContext`) exposing `mute()`, so `AudioPlayer` can mute the video without querying the DOM.
 
-**Landing (2026-10-10)**: there is no "Enter" gate. Browsers block audible autoplay, so the video autoplays muted (`defaultMuted` + an explicit `play()` for iOS) and the first click or Enter/Space anywhere unmutes it (`hooks/useFirstInteraction`, capture phase, removed after the first interaction). A first click on the speaker button only toggles once. A "Tap anywhere for sound" hint sits under the subtitle until then. Unmuting the video pauses whatever is playing in a project (`pauseActivePlayback`). The hero is shorter than the screen (desktop `100svh − 17.5rem`, phone `100svh − 21rem`) so the Theatre title shows above the fold while the Theatre section keeps `py-40`. The side thumbnail strips grow with the page rather than scrolling in their own box.
+**Landing (2026-10-10)**: there is no "Enter" gate. Browsers block audible autoplay, so the video autoplays muted (`defaultMuted` + an explicit `play()` for iOS) and the first click or Enter/Space anywhere unmutes it (`hooks/useFirstInteraction`, capture phase, removed after the first interaction). A first click on the speaker button only toggles once. A "Tap anywhere for sound" hint sits under the subtitle until then. Unmuting the video pauses whatever is playing in a project (`pauseActivePlayback`). The hero is shorter than the screen (desktop `100svh − 17.5rem`, phone `100svh − 21rem`) so the Theatre title shows above the fold while the Theatre section keeps `py-40`. The side thumbnail strips and the open panel grow with the page rather than scrolling in their own boxes.
 
 ## 4. Favicon and SEO
 
@@ -191,7 +191,7 @@ The mute state in `Homepage.tsx` is lifted into a small context (`BackgroundVide
 - `Lightbox`: open, navigate, wrap-around, close, focus restore.
 - `AudioPlayer`: single active track; mutes the background video.
 
-Test files are **git-ignored and kept local-only** (owner's decision, 2026-10-03).
+Test files are committed (they were git-ignored from 2026-10-03 to 2026-10-10).
 
 **Manual checks** (dev server, before completion): motion feel, mobile layout, reduced motion, real SoundCloud, Spotify, YouTube and Instagram embeds (incl. muting the background video), favicon in the browser tab.
 
