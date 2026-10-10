@@ -22,6 +22,7 @@ const Homepage = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(true);
   const [interacted, setInteracted] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const soundButtonRef = useRef<HTMLButtonElement>(null);
 
   // Browsers only allow sound after the visitor interacts, so the video starts
@@ -46,6 +47,14 @@ const Homepage = () => {
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 1000);
     return () => clearTimeout(timer);
+  }, []);
+
+  // The sound hint is fixed beside the speaker icon, so hide it once the page
+  // scrolls rather than let it float over the content.
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 0);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const openModal = () => {
@@ -97,7 +106,7 @@ const Homepage = () => {
         <Navbar openModal={openModal} />
         {/* Shorter than the screen so the Theatre title peeks above the fold
             (phones also clear the fixed social bar). */}
-        <div className="h-[calc(100svh-28rem)] md:h-[calc(100svh-24rem)] relative">
+        <div className="h-[calc(100svh-24.2rem)] md:h-[calc(100svh-22rem)] relative">
           <video
             ref={videoRef}
             autoPlay
@@ -120,19 +129,26 @@ const Homepage = () => {
             Your browser does not support the video tag.
           </video>
 
-          <button
-            ref={soundButtonRef}
-            className="fixed z-10 bottom-20 md:bottom-[57px] left-6 md:left-8 hover:opacity-80"
-            type="button"
-            aria-label={muted ? "Turn sound on" : "Turn sound off"}
-            onClick={handleSoundButton}
-          >
-            {muted ? (
-              <Mute className="text-tangerine md:text-teal" />
-            ) : (
-              <Play className="text-tangerine md:text-teal" />
+          <div className="fixed z-10 bottom-20 md:bottom-[57px] left-6 md:left-8 flex items-center gap-3">
+            <button
+              ref={soundButtonRef}
+              className="hover:opacity-80"
+              type="button"
+              aria-label={muted ? "Turn sound on" : "Turn sound off"}
+              onClick={handleSoundButton}
+            >
+              {muted ? (
+                <Mute className="text-tangerine md:text-teal" />
+              ) : (
+                <Play className="text-tangerine md:text-teal" />
+              )}
+            </button>
+            {muted && !interacted && !scrolled && (
+              <p className="text-lg tracking-wide text-tangerine md:text-teal animate-pulse motion-reduce:animate-none">
+                Tap anywhere for sound
+              </p>
             )}
-          </button>
+          </div>
           <div
             className={cn(
               "absolute left-1/2 -translate-x-1/2 transition-all duration-1000 ease-in-out",
@@ -159,11 +175,6 @@ const Homepage = () => {
               </div>
             </div>
           </div>
-          {muted && !interacted && (
-            <p className="absolute left-1/2 -translate-x-1/2 -bottom-4 sm:bottom-0 text-lg tracking-wide text-tangerine animate-pulse motion-reduce:animate-none">
-              Tap anywhere for sound
-            </p>
-          )}
         </div>
 
         <Container className="py-40" id="theatre">

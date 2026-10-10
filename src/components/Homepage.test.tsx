@@ -1,4 +1,4 @@
-import { render, screen, act } from "@testing-library/react";
+import { render, screen, act, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi } from "vitest";
 import { HelmetProvider } from "react-helmet-async";
@@ -42,6 +42,29 @@ describe("Homepage landing", () => {
     await userEvent.click(document.body);
     expect(video.muted).toBe(false);
     expect(screen.queryByText("Tap anywhere for sound")).toBeNull();
+  });
+
+  it("the hint sits beside the speaker button", () => {
+    renderHomepage();
+    const hint = screen.getByText("Tap anywhere for sound");
+    const speaker = screen.getByRole("button", { name: "Turn sound on" });
+    expect(hint.parentElement).toBe(speaker.parentElement);
+    expect(hint.parentElement).toHaveClass("fixed");
+  });
+
+  it("the hint hides once the page is scrolled, so it never floats over content", () => {
+    renderHomepage();
+    expect(screen.getByText("Tap anywhere for sound")).toBeInTheDocument();
+    act(() => {
+      window.scrollY = 120;
+      fireEvent.scroll(window);
+    });
+    expect(screen.queryByText("Tap anywhere for sound")).toBeNull();
+    act(() => {
+      window.scrollY = 0;
+      fireEvent.scroll(window);
+    });
+    expect(screen.getByText("Tap anywhere for sound")).toBeInTheDocument();
   });
 
   it("a first click on the speaker button toggles once, not twice", async () => {
