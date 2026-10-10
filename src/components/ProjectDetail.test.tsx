@@ -6,20 +6,35 @@ import ProjectDetail from "./ProjectDetail";
 import { BackgroundVideoProvider } from "../context/BackgroundVideoContext";
 import type { Project } from "../types/project";
 
-const cover = { url: "https://res.cloudinary.com/x/image/upload/v1/cover.jpg", alt: "Cover" };
-const base: Project = { slug: "s", title: "Shantify", cover, photos: [], audio: [] };
+const cover = {
+  url: "https://res.cloudinary.com/x/image/upload/v1/cover.jpg",
+  alt: "Cover",
+};
+const base: Project = {
+  slug: "s",
+  title: "Shantify",
+  cover,
+  photos: [],
+  audio: [],
+};
 
 const renderDetail = (project: Project, onClose = () => {}) =>
   render(
     <BackgroundVideoProvider>
-      <ProjectDetail project={project} onClose={onClose} closeButtonRef={createRef<HTMLButtonElement>()} />
+      <ProjectDetail
+        project={project}
+        onClose={onClose}
+        closeButtonRef={createRef<HTMLButtonElement>()}
+      />
     </BackgroundVideoProvider>
   );
 
 describe("ProjectDetail", () => {
   it("cover-only project renders header and nothing else", () => {
     const { container } = renderDetail(base);
-    expect(screen.getByRole("heading", { level: 3, name: "Shantify" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { level: 3, name: "Shantify" })
+    ).toBeInTheDocument();
     expect(container.querySelector("p")).toBeNull();
     expect(screen.queryByRole("button", { name: /Open photo/ })).toBeNull();
     expect(container.querySelector("audio")).toBeNull();
@@ -37,13 +52,17 @@ describe("ProjectDetail", () => {
 
   it("content fades in after the panel has grown", () => {
     renderDetail(base);
-    const content = screen.getByRole("heading", { level: 3 }).closest("section")!.firstElementChild!.nextElementSibling!;
+    const content = screen
+      .getByRole("heading", { level: 3 })
+      .closest("section")!.firstElementChild!.nextElementSibling!;
     expect(content).toHaveClass("animate-fade-in-after-grow");
   });
 
   it("header loads an optimised cover", () => {
     renderDetail(base);
-    expect(screen.getByAltText("Cover").getAttribute("src")).toContain("/upload/f_auto,q_auto/");
+    expect(screen.getByAltText("Cover").getAttribute("src")).toContain(
+      "/upload/f_auto,q_auto/"
+    );
   });
 
   it("full project renders every block in order", () => {
@@ -60,7 +79,8 @@ describe("ProjectDetail", () => {
     const photo = screen.getByRole("button", { name: "Open photo 1" });
     const play = screen.getByRole("button", { name: "Play Track A" });
     const iframe = container.querySelector("iframe")!;
-    const follows = (a: Node, b: Node) => a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING;
+    const follows = (a: Node, b: Node) =>
+      a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING;
     expect(follows(h, blurb)).toBeTruthy();
     expect(follows(blurb, photo)).toBeTruthy();
     expect(follows(photo, play)).toBeTruthy();
@@ -76,7 +96,9 @@ describe("ProjectDetail", () => {
     });
     const sc = screen.getByTitle("SoundCloud player");
     const yt = screen.getByTitle("YouTube player");
-    expect(sc.compareDocumentPosition(yt) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(
+      sc.compareDocumentPosition(yt) & Node.DOCUMENT_POSITION_FOLLOWING
+    ).toBeTruthy();
   });
 
   it("cover links out only when link set", () => {
@@ -93,7 +115,9 @@ describe("ProjectDetail", () => {
   it("close button calls onClose", async () => {
     const onClose = vi.fn();
     renderDetail(base, onClose);
-    await userEvent.click(screen.getByRole("button", { name: "Close project" }));
+    await userEvent.click(
+      screen.getByRole("button", { name: "Close project" })
+    );
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 });

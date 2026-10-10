@@ -20,7 +20,11 @@ interface BackgroundVideoValue {
 
 const BackgroundVideoContext = createContext<BackgroundVideoValue | null>(null);
 
-export const BackgroundVideoProvider = ({ children }: { children: ReactNode }) => {
+export const BackgroundVideoProvider = ({
+  children,
+}: {
+  children: ReactNode;
+}) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [muted, setMuted] = useState(true);
 
@@ -66,7 +70,9 @@ export const BackgroundVideoProvider = ({ children }: { children: ReactNode }) =
 export const useBackgroundVideo = () => {
   const ctx = useContext(BackgroundVideoContext);
   if (!ctx) {
-    throw new Error("useBackgroundVideo must be used within BackgroundVideoProvider");
+    throw new Error(
+      "useBackgroundVideo must be used within BackgroundVideoProvider"
+    );
   }
   return ctx;
 };

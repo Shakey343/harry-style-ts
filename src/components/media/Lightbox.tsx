@@ -75,12 +75,12 @@ const Lightbox = ({ photos, index, onIndexChange, onClose }: LightboxProps) => {
       aria-label="Photo viewer"
       tabIndex={-1}
       onKeyDown={handleKeyDown}
-      onClick={(e) => {
+      onClick={e => {
         if (e.target === e.currentTarget) {
           onClose();
         }
       }}
-      onPointerDown={(e) => {
+      onPointerDown={e => {
         pointerStartX.current = e.clientX;
       }}
       onPointerUp={handlePointerUp}

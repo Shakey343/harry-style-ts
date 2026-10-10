@@ -15,11 +15,11 @@ const YouTubeEmbed = ({ url }: { url: string }) => {
     }
     let cancelled = false;
     loadYouTubeApi()
-      .then((YT) => {
+      .then(YT => {
         if (cancelled || !iframeRef.current) return;
         playerRef.current = new YT.Player(iframeRef.current, {
           events: {
-            onStateChange: (e) => {
+            onStateChange: e => {
               if (!cancelled && e.data === YT.PlayerState.PLAYING) onPlay();
             },
           },

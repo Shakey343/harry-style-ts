@@ -26,11 +26,22 @@ afterEach(() => {
 describe("SoundCloudEmbed playback", () => {
   it("mutes the background video on PLAY and pauses when another player starts", async () => {
     const widget = { bind: vi.fn(), unbind: vi.fn(), pause: vi.fn() };
-    window.SC = { Widget: Object.assign(vi.fn(() => widget), { Events: { PLAY: "play" } }) };
-    const { container } = render(<SoundCloudEmbed url="https://soundcloud.com/a/b" />);
+    window.SC = {
+      Widget: Object.assign(
+        vi.fn(() => widget),
+        { Events: { PLAY: "play" } }
+      ),
+    };
+    const { container } = render(
+      <SoundCloudEmbed url="https://soundcloud.com/a/b" />
+    );
 
-    await waitFor(() => expect(widget.bind).toHaveBeenCalledWith("play", expect.any(Function)));
-    expect(window.SC.Widget).toHaveBeenCalledWith(container.querySelector("iframe"));
+    await waitFor(() =>
+      expect(widget.bind).toHaveBeenCalledWith("play", expect.any(Function))
+    );
+    expect(window.SC.Widget).toHaveBeenCalledWith(
+      container.querySelector("iframe")
+    );
 
     act(() => widget.bind.mock.calls[0][1]());
     expect(mute).toHaveBeenCalledTimes(1);
@@ -47,12 +58,21 @@ describe("SoundCloudEmbed unmount", () => {
     const widget = {
       bind: vi.fn(),
       unbind: vi.fn(() => {
-        throw new TypeError("Cannot read properties of null (reading 'postMessage')");
+        throw new TypeError(
+          "Cannot read properties of null (reading 'postMessage')"
+        );
       }),
       pause: vi.fn(),
     };
-    window.SC = { Widget: Object.assign(vi.fn(() => widget), { Events: { PLAY: "play" } }) };
-    const { unmount } = render(<SoundCloudEmbed url="https://soundcloud.com/a/b" />);
+    window.SC = {
+      Widget: Object.assign(
+        vi.fn(() => widget),
+        { Events: { PLAY: "play" } }
+      ),
+    };
+    const { unmount } = render(
+      <SoundCloudEmbed url="https://soundcloud.com/a/b" />
+    );
     await waitFor(() => expect(widget.bind).toHaveBeenCalled());
 
     expect(() => unmount()).not.toThrow();
@@ -64,12 +84,18 @@ describe("SoundCloudEmbed unmount", () => {
 describe("YouTubeEmbed", () => {
   it("renders a nocookie player for a valid link and nothing for an invalid one", () => {
     window.YT = { Player: vi.fn(), PlayerState: { PLAYING: 1 } };
-    const { container, unmount } = render(<YouTubeEmbed url="https://youtu.be/dQw4w9WgXcQ" />);
+    const { container, unmount } = render(
+      <YouTubeEmbed url="https://youtu.be/dQw4w9WgXcQ" />
+    );
     const iframe = container.querySelector("iframe")!;
     expect(iframe.getAttribute("title")).toBe("YouTube player");
-    expect(iframe.getAttribute("src")).toContain("youtube-nocookie.com/embed/dQw4w9WgXcQ?enablejsapi=1");
+    expect(iframe.getAttribute("src")).toContain(
+      "youtube-nocookie.com/embed/dQw4w9WgXcQ?enablejsapi=1"
+    );
     unmount();
-    const invalid = render(<YouTubeEmbed url="https://evil.com/watch?v=dQw4w9WgXcQ" />);
+    const invalid = render(
+      <YouTubeEmbed url="https://evil.com/watch?v=dQw4w9WgXcQ" />
+    );
     expect(invalid.container.firstChild).toBeNull();
   });
 
@@ -78,7 +104,10 @@ describe("YouTubeEmbed", () => {
     let events: { onStateChange: (e: { data: number }) => void } | undefined;
     window.YT = {
       // A regular function: the component calls it with `new`.
-      Player: vi.fn(function (_el: HTMLIFrameElement, opts: { events: typeof events }) {
+      Player: vi.fn(function (
+        _el: HTMLIFrameElement,
+        opts: { events: typeof events }
+      ) {
         events = opts.events;
         return player;
       }),
@@ -99,7 +128,9 @@ describe("YouTubeEmbed", () => {
 
 describe("SpotifyEmbed", () => {
   it("renders nothing for an invalid link", () => {
-    const { container } = render(<SpotifyEmbed url="https://open.spotify.com/user/x" />);
+    const { container } = render(
+      <SpotifyEmbed url="https://open.spotify.com/user/x" />
+    );
     expect(container.firstChild).toBeNull();
   });
 
@@ -114,16 +145,29 @@ describe("SpotifyEmbed", () => {
     };
     const api = {
       createController: vi.fn(
-        (_el: HTMLElement, _opts: { uri: string }, cb: (c: typeof controller) => void) => cb(controller)
+        (
+          _el: HTMLElement,
+          _opts: { uri: string },
+          cb: (c: typeof controller) => void
+        ) => cb(controller)
       ),
     };
-    const { unmount } = render(<SpotifyEmbed url="https://open.spotify.com/track/abc123?si=x" />);
-    await waitFor(() => expect(window.onSpotifyIframeApiReady).toBeTypeOf("function"));
+    const { unmount } = render(
+      <SpotifyEmbed url="https://open.spotify.com/track/abc123?si=x" />
+    );
+    await waitFor(() =>
+      expect(window.onSpotifyIframeApiReady).toBeTypeOf("function")
+    );
     act(() => window.onSpotifyIframeApiReady!(api));
 
     await waitFor(() => expect(api.createController).toHaveBeenCalled());
-    expect(api.createController.mock.calls[0][1].uri).toBe("spotify:track:abc123");
-    expect(controller.addListener).toHaveBeenCalledWith("playback_update", expect.any(Function));
+    expect(api.createController.mock.calls[0][1].uri).toBe(
+      "spotify:track:abc123"
+    );
+    expect(controller.addListener).toHaveBeenCalledWith(
+      "playback_update",
+      expect.any(Function)
+    );
 
     act(() => listener!({ data: { isPaused: false } }));
     act(() => listener!({ data: { isPaused: false } }));
@@ -143,7 +187,9 @@ describe("SpotifyEmbed", () => {
 describe("InstagramEmbed playback", () => {
   it("mutes the background video when the visitor clicks into the post", async () => {
     vi.useFakeTimers();
-    const { container } = render(<InstagramEmbed url="https://www.instagram.com/p/ABC123/" />);
+    const { container } = render(
+      <InstagramEmbed url="https://www.instagram.com/p/ABC123/" />
+    );
     const iframe = document.createElement("iframe");
     container.firstElementChild!.appendChild(iframe); // what Instagram's embed.js does
 

@@ -6,7 +6,10 @@ const button = document.createElement("button");
 const ignoreRef = { current: button };
 document.body.appendChild(button);
 
-const press = (key: string) => document.body.dispatchEvent(new KeyboardEvent("keydown", { key, bubbles: true }));
+const press = (key: string) =>
+  document.body.dispatchEvent(
+    new KeyboardEvent("keydown", { key, bubbles: true })
+  );
 
 afterEach(() => vi.restoreAllMocks());
 
@@ -44,7 +47,9 @@ describe("useFirstInteraction", () => {
 
   it("stops listening when unmounted", () => {
     const onFirst = vi.fn();
-    const { unmount } = renderHook(() => useFirstInteraction(onFirst, ignoreRef));
+    const { unmount } = renderHook(() =>
+      useFirstInteraction(onFirst, ignoreRef)
+    );
     unmount();
     document.body.click();
     expect(onFirst).not.toHaveBeenCalled();

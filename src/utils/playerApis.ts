@@ -14,7 +14,7 @@ export function loadYouTubeApi(): Promise<YouTubeApi> {
         previous?.();
         if (window.YT) resolve(window.YT);
       };
-      loadScript("https://www.youtube.com/iframe_api").catch((err) => {
+      loadScript("https://www.youtube.com/iframe_api").catch(err => {
         youTube = null;
         reject(err);
       });
@@ -28,8 +28,8 @@ let spotify: Promise<SpotifyIframeApi> | null = null;
 export function loadSpotifyApi(): Promise<SpotifyIframeApi> {
   if (!spotify) {
     spotify = new Promise((resolve, reject) => {
-      window.onSpotifyIframeApiReady = (api) => resolve(api);
-      loadScript("https://open.spotify.com/embed/iframe-api/v1").catch((err) => {
+      window.onSpotifyIframeApiReady = api => resolve(api);
+      loadScript("https://open.spotify.com/embed/iframe-api/v1").catch(err => {
         spotify = null;
         reject(err);
       });

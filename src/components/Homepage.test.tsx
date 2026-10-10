@@ -47,10 +47,14 @@ describe("Homepage landing", () => {
   it("a first click on the speaker button toggles once, not twice", async () => {
     const { container } = renderHomepage();
     const video = container.querySelector("video")!;
-    await userEvent.click(screen.getByRole("button", { name: "Turn sound on" }));
+    await userEvent.click(
+      screen.getByRole("button", { name: "Turn sound on" })
+    );
     expect(video.muted).toBe(false);
     expect(screen.queryByText("Tap anywhere for sound")).toBeNull();
-    await userEvent.click(screen.getByRole("button", { name: "Turn sound off" }));
+    await userEvent.click(
+      screen.getByRole("button", { name: "Turn sound off" })
+    );
     expect(video.muted).toBe(true);
     await userEvent.click(document.body);
     expect(video.muted).toBe(true); // a later click never overrides the visitor's choice
@@ -59,7 +63,9 @@ describe("Homepage landing", () => {
   it("the title animates up after a second without any interaction", () => {
     vi.useFakeTimers();
     const { container } = renderHomepage();
-    const title = container.querySelector('img[src*="harry-style"]')!.closest("div.absolute")!;
+    const title = container
+      .querySelector('img[src*="harry-style"]')!
+      .closest("div.absolute")!;
     const start = title.className;
     act(() => vi.advanceTimersByTime(999));
     expect(title.className).toBe(start);

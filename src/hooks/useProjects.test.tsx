@@ -7,7 +7,9 @@ vi.mock("axios");
 const mockedGet = vi.mocked(axios.get);
 
 describe("useProjects", () => {
-  beforeEach(() => { mockedGet.mockReset(); });
+  beforeEach(() => {
+    mockedGet.mockReset();
+  });
 
   it("starts loading then ready with projects", async () => {
     const projects = [{ id: "a" }];

@@ -64,7 +64,9 @@ describe("AudioPlayer", () => {
     Object.defineProperty(el, "duration", { value: 200, configurable: true });
     Object.defineProperty(el, "currentTime", { value: 50, configurable: true });
     fireEvent.timeUpdate(el);
-    expect(screen.getByRole("progressbar").getAttribute("aria-valuenow")).toBe("25");
+    expect(screen.getByRole("progressbar").getAttribute("aria-valuenow")).toBe(
+      "25"
+    );
   });
 
   const rejectPlay = (name: string) =>

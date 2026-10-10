@@ -8,7 +8,10 @@ const ACTIVATING_KEYS = new Set(["Enter", " "]);
 // Calls `onFirst` once, on the visitor's first click or Enter/Space anywhere
 // on the page. A first interaction inside `ignoreRef` (a control that handles
 // the same job itself) uses it up without calling `onFirst`.
-export function useFirstInteraction(onFirst: () => void, ignoreRef: RefObject<HTMLElement>): void {
+export function useFirstInteraction(
+  onFirst: () => void,
+  ignoreRef: RefObject<HTMLElement>
+): void {
   const onFirstRef = useRef(onFirst);
   onFirstRef.current = onFirst;
 

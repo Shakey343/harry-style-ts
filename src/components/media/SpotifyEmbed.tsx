@@ -25,19 +25,23 @@ const SpotifyEmbed = ({ url }: { url: string }) => {
     const target = document.createElement("div");
     hostRef.current.appendChild(target);
     loadSpotifyApi()
-      .then((api) => {
+      .then(api => {
         if (cancelled) return;
         api.createController(
           target,
-          { uri: `spotify:${path.replace("/", ":")}`, width: "100%", height: heightFor(path) },
-          (controller) => {
+          {
+            uri: `spotify:${path.replace("/", ":")}`,
+            width: "100%",
+            height: heightFor(path),
+          },
+          controller => {
             if (cancelled) {
               controller.destroy();
               return;
             }
             controllerRef.current = controller;
             // playback_update repeats while playing; act only when it starts.
-            controller.addListener("playback_update", (e) => {
+            controller.addListener("playback_update", e => {
               if (paused && !e.data.isPaused) onPlay();
               paused = e.data.isPaused;
             });

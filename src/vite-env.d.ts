@@ -20,7 +20,10 @@ interface YouTubeApi {
 }
 
 interface SpotifyController {
-  addListener: (event: string, cb: (e: { data: { isPaused: boolean } }) => void) => void;
+  addListener: (
+    event: string,
+    cb: (e: { data: { isPaused: boolean } }) => void
+  ) => void;
   pause: () => void;
   destroy: () => void;
 }
@@ -35,7 +38,11 @@ interface SpotifyIframeApi {
 
 interface Window {
   instgrm?: { Embeds: { process: () => void } };
-  SC?: { Widget: ((iframe: HTMLIFrameElement) => SoundCloudWidget) & { Events: { PLAY: string } } };
+  SC?: {
+    Widget: ((iframe: HTMLIFrameElement) => SoundCloudWidget) & {
+      Events: { PLAY: string };
+    };
+  };
   YT?: YouTubeApi;
   onYouTubeIframeAPIReady?: () => void;
   onSpotifyIframeApiReady?: (api: SpotifyIframeApi) => void;

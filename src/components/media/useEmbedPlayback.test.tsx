@@ -41,9 +41,12 @@ describe("useEmbedPlayback", () => {
   it("uses the latest pause callback", () => {
     const first = vi.fn();
     const second = vi.fn();
-    const { result, rerender } = renderHook(({ pause }) => useEmbedPlayback(pause), {
-      initialProps: { pause: first },
-    });
+    const { result, rerender } = renderHook(
+      ({ pause }) => useEmbedPlayback(pause),
+      {
+        initialProps: { pause: first },
+      }
+    );
     act(() => result.current());
     rerender({ pause: second });
     claimPlayback({ pause: vi.fn() });

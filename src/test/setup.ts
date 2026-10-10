@@ -1,18 +1,18 @@
-import '@testing-library/jest-dom/vitest'
-import { vi } from 'vitest'
+import "@testing-library/jest-dom/vitest";
+import { vi } from "vitest";
 
-Object.defineProperty(HTMLMediaElement.prototype, 'play', {
+Object.defineProperty(HTMLMediaElement.prototype, "play", {
   configurable: true,
   writable: true,
   value: vi.fn().mockResolvedValue(undefined),
-})
-Object.defineProperty(HTMLMediaElement.prototype, 'pause', {
+});
+Object.defineProperty(HTMLMediaElement.prototype, "pause", {
   configurable: true,
   writable: true,
   value: vi.fn(),
-})
+});
 
-Object.defineProperty(window, 'matchMedia', {
+Object.defineProperty(window, "matchMedia", {
   configurable: true,
   writable: true,
   value: vi.fn().mockImplementation((query: string) => ({
@@ -25,6 +25,6 @@ Object.defineProperty(window, 'matchMedia', {
     removeEventListener: vi.fn(),
     dispatchEvent: vi.fn(),
   })),
-})
+});
 
-Element.prototype.scrollIntoView = vi.fn()
+Element.prototype.scrollIntoView = vi.fn();

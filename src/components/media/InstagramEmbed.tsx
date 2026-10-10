@@ -40,7 +40,10 @@ const InstagramEmbed = ({ url }: { url: string }) => {
     const onWindowBlur = () => {
       timer = setTimeout(() => {
         const focused = document.activeElement;
-        if (focused instanceof HTMLIFrameElement && wrapperRef.current?.contains(focused)) {
+        if (
+          focused instanceof HTMLIFrameElement &&
+          wrapperRef.current?.contains(focused)
+        ) {
           onPlay();
         }
       }, 0);

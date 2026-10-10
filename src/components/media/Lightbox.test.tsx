@@ -12,7 +12,14 @@ const photos = [
 
 const Harness = ({ start = 0, onClose = () => {} }) => {
   const [i, setI] = useState(start);
-  return <Lightbox photos={photos} index={i} onIndexChange={setI} onClose={onClose} />;
+  return (
+    <Lightbox
+      photos={photos}
+      index={i}
+      onIndexChange={setI}
+      onClose={onClose}
+    />
+  );
 };
 
 describe("Lightbox", () => {
@@ -21,7 +28,10 @@ describe("Lightbox", () => {
     expect(screen.getByText("3 / 3")).toBeInTheDocument();
     await userEvent.click(screen.getByRole("button", { name: "Next photo" }));
     expect(screen.getByText("1 / 3")).toBeInTheDocument();
-    expect(screen.getByAltText("A")).toHaveAttribute("src", expect.stringContaining("f_auto,q_auto"));
+    expect(screen.getByAltText("A")).toHaveAttribute(
+      "src",
+      expect.stringContaining("f_auto,q_auto")
+    );
   });
 
   it("arrow keys navigate", async () => {
@@ -59,7 +69,9 @@ describe("Lightbox", () => {
     document.body.appendChild(opener);
     opener.focus();
     const { unmount } = render(<Harness />);
-    expect(screen.getByRole("button", { name: "Close photo viewer" })).toHaveFocus();
+    expect(
+      screen.getByRole("button", { name: "Close photo viewer" })
+    ).toHaveFocus();
     unmount();
     expect(opener).toHaveFocus();
     opener.remove();

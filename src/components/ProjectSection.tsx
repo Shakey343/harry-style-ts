@@ -20,7 +20,7 @@ const ProjectSection = ({ tag }: { tag: Section }) => {
   const tileRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const lastSlugRef = useRef<string | null>(null);
 
-  const selectedIndex = projects.findIndex((p) => p.slug === selectedSlug);
+  const selectedIndex = projects.findIndex(p => p.slug === selectedSlug);
   const selected = selectedIndex === -1 ? null : projects[selectedIndex];
 
   useEffect(() => {
@@ -64,13 +64,15 @@ const ProjectSection = ({ tag }: { tag: Section }) => {
   }
 
   if (status === "error") {
-    return <p className="text-center text-bone">Projects unavailable right now</p>;
+    return (
+      <p className="text-center text-bone">Projects unavailable right now</p>
+    );
   }
 
   const renderTile = (project: Project, size: "full" | "small") => (
     <ProjectTile
       key={project.slug}
-      ref={(el) => {
+      ref={el => {
         tileRefs.current[project.slug] = el;
       }}
       project={project}
@@ -84,7 +86,7 @@ const ProjectSection = ({ tag }: { tag: Section }) => {
     if (!selected) {
       return (
         <div className="flex flex-wrap justify-center gap-10">
-          {projects.map((p) => renderTile(p, "full"))}
+          {projects.map(p => renderTile(p, "full"))}
         </div>
       );
     }
@@ -98,15 +100,22 @@ const ProjectSection = ({ tag }: { tag: Section }) => {
         transition={LAYOUT_TRANSITION}
         className="min-w-0 flex-1"
       >
-        <ProjectDetail project={selected} onClose={reset} closeButtonRef={closeButtonRef} />
+        <ProjectDetail
+          project={selected}
+          onClose={reset}
+          closeButtonRef={closeButtonRef}
+        />
       </motion.div>
     );
 
     if (!isDesktop) {
       return (
         <div className="flex flex-col gap-4">
-          <div data-testid="strip-mobile" className={`${stripClass} overflow-x-auto`}>
-            {[...left, ...right].map((p) => renderTile(p, "small"))}
+          <div
+            data-testid="strip-mobile"
+            className={`${stripClass} overflow-x-auto`}
+          >
+            {[...left, ...right].map(p => renderTile(p, "small"))}
           </div>
           {detail}
         </div>
@@ -116,11 +125,11 @@ const ProjectSection = ({ tag }: { tag: Section }) => {
     return (
       <div className="flex items-start gap-4">
         <div data-testid="strip-left" className={`${stripClass} flex-col`}>
-          {left.map((p) => renderTile(p, "small"))}
+          {left.map(p => renderTile(p, "small"))}
         </div>
         {detail}
         <div data-testid="strip-right" className={`${stripClass} flex-col`}>
-          {right.map((p) => renderTile(p, "small"))}
+          {right.map(p => renderTile(p, "small"))}
         </div>
       </div>
     );
