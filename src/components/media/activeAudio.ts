@@ -16,3 +16,10 @@ export const releasePlayback = (player: Pausable): void => {
     active = null;
   }
 };
+
+// Stops whatever is playing (e.g. when the background video is unmuted).
+export const pauseActivePlayback = (): void => {
+  const player = active;
+  active = null;
+  player?.pause();
+};

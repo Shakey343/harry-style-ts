@@ -8,6 +8,7 @@ import {
   type ReactNode,
   type RefObject,
 } from "react";
+import { pauseActivePlayback } from "../components/media/activeAudio";
 
 interface BackgroundVideoValue {
   videoRef: RefObject<HTMLVideoElement>;
@@ -35,6 +36,7 @@ export const BackgroundVideoProvider = ({ children }: { children: ReactNode }) =
     if (!video) {
       return;
     }
+    pauseActivePlayback();
     video.muted = false;
     video.play();
     setMuted(false);
