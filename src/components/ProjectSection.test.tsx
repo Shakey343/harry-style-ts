@@ -146,6 +146,20 @@ describe("ProjectSection", () => {
     expect(screen.getByRole("button", { name: "Bravo" })).toHaveFocus();
   });
 
+  it("closing scrolls the closed tile back into view", async () => {
+    renderSection();
+    await userEvent.click(screen.getByRole("button", { name: "Bravo" }));
+    const scroll = vi.mocked(Element.prototype.scrollIntoView);
+    scroll.mockClear();
+    await userEvent.click(
+      screen.getByRole("button", { name: "Close project" })
+    );
+    const tile = screen.getByRole("button", { name: "Bravo" });
+    expect(scroll).toHaveBeenCalledTimes(1);
+    expect(scroll.mock.contexts[0]).toBe(tile);
+    expect(scroll).toHaveBeenCalledWith({ behavior: "smooth", block: "center" });
+  });
+
   it("escape resets grid", async () => {
     renderSection();
     await userEvent.click(screen.getByRole("button", { name: "Bravo" }));

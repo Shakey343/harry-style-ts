@@ -21,6 +21,9 @@ const ProjectTile = forwardRef<HTMLButtonElement, ProjectTileProps>(
       <motion.button
         ref={ref}
         layoutId={"tile-" + slug}
+        // Position only: scaling between the panel's and tile's very different
+        // shapes would stretch the image.
+        layout="position"
         transition={LAYOUT_TRANSITION}
         type="button"
         aria-label={title}

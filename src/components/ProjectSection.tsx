@@ -28,7 +28,10 @@ const ProjectSection = ({ tag }: { tag: Section }) => {
     if (selectedSlug) {
       closeButtonRef.current?.focus({ preventScroll: true });
     } else if (lastSlugRef.current) {
-      tileRefs.current[lastSlugRef.current]?.focus({ preventScroll: true });
+      const tile = tileRefs.current[lastSlugRef.current];
+      // The page shrinks a lot when the panel closes; bring the tile back into view.
+      tile?.scrollIntoView({ behavior: "smooth", block: "center" });
+      tile?.focus({ preventScroll: true });
       lastSlugRef.current = null;
     }
   }, [selectedSlug]);
