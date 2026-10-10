@@ -3,7 +3,7 @@
 **Date:** 2026-10-03
 **Repos:** `harry-style` (frontend), `api-harry-style` (backend)
 **Branch (both repos):** `feature/project-showcase`
-**Revised:** 2026-10-05, to match the implementation: dynamic folders confirmed, built-in Title/Description fields, cache hardening, sanitized logging, PDFs ignored.
+**Revised:** 2026-10-05, to match the implementation: dynamic folders confirmed, built-in Title/Description fields, cache hardening, sanitized logging, PDFs ignored. 2026-10-10: Spotify and YouTube embeds; embeds coordinate playback; layout fixes (panel below navbar, sized to content, phone layout, Theatre title above the fold).
 
 ## Goal
 
@@ -12,7 +12,7 @@ Turn each project on the homepage from a single linked image into a rich, expand
 ### Success criteria
 
 - Harry can add, edit, reorder and remove projects and their photos/audio using only the Cloudinary Media Library, with no code changes or redeploys.
-- Every project shows title, description and cover image; blurb, photos, MP3s, SoundCloud and Instagram appear only when present.
+- Every project shows title, description and cover image; blurb, photos, MP3s, SoundCloud, Spotify, YouTube and Instagram appear only when present.
 - Clicking a tile expands it to screen height in place; other tiles shrink into side strips and can be clicked to swap directly.
 - Tiles gently bob and tilt at rest; motion is disabled for users who prefer reduced motion.
 - Malformed content in Cloudinary degrades gracefully (project or block skipped), never breaks the page.
@@ -29,7 +29,7 @@ Turn each project on the homepage from a single linked image into a rich, expand
 ```
 theatre/
   01-shantify/
-    cover.jpg            ← metadata: Title, Description (built-in), blurb, link_to, soundcloud, instagram
+    cover.jpg            ← metadata: Title, Description (built-in), blurb, link_to, soundcloud, spotify, youtube, instagram
     01-rehearsal.jpg     ← optional built-in Description (used as alt text)
     02-opening-night.jpg
     sea-shanty-medley.mp3
@@ -50,7 +50,7 @@ Rules (all implemented in `buildProjects`):
 - **Metadata**: Cloudinary context fields on the cover.
     - **Title** (required): a custom `title` field, or else the Media Library's built-in **Title** (stored as `caption`).
     - **Description**: a custom `description` field, or else the built-in **Description** (stored as `alt`).
-    - **Custom fields**: `blurb`, `link_to`, `soundcloud`, `instagram`.
+    - **Custom fields**: `blurb`, `link_to`, `soundcloud`, `spotify`, `youtube`, `instagram` (one link each).
     - All except the title are optional.
 - **Photos**: every other image in the folder. The photo's built-in Description (`alt`) is its alt text; the fallback alt is `"<title>, photo <n>"`.
 - **Audio**: assets with format `mp3` (Cloudinary stores these under resource type `video`). Display name derived from the asset name: number prefix removed, dashes/underscores → spaces, sentence case (`02-sea-shanty-medley.mp3` → `Sea shanty medley`). Ordered like photos.
@@ -77,6 +77,8 @@ Rules (all implemented in `buildProjects`):
       "blurb": "…",
       "link": "https://…",
       "soundcloud": "https://soundcloud.com/…",
+      "spotify": "https://open.spotify.com/track/…",
+      "youtube": "https://www.youtube.com/watch?v=…",
       "instagram": "https://www.instagram.com/p/…",
       "cover": { "url": "https://res.cloudinary.com/…", "alt": "Shantify" },
       "photos": [{ "url": "…", "alt": "…" }],
@@ -124,9 +126,9 @@ The existing `/api/images/by-tag` endpoint is kept unchanged until the new front
 - `components/ProjectSection` (existing file, rewritten): owns `selectedSlug`. Renders the resting grid when nothing is selected, otherwise `[left strip | ProjectDetail | right strip]`.
 - `components/ProjectTile`: cover image button, `size: "full" | "small"`. Full tiles show the description on hover (as today's subtitle). Small tiles are labelled with the project title (`aria-label` and tooltip).
 - `components/ProjectDetail`: editorial single-column content (below).
-- `components/media/PhotoGrid`, `components/media/Lightbox`, `components/media/AudioPlayer`, `components/media/SoundCloudEmbed`, `components/media/InstagramEmbed`.
+- `components/media/PhotoGrid`, `components/media/Lightbox`, `components/media/AudioPlayer`, `components/media/SoundCloudEmbed`, `components/media/SpotifyEmbed`, `components/media/YouTubeEmbed`, `components/media/InstagramEmbed`, and `components/media/useEmbedPlayback` (shared "an embed started playing" hook).
 - `utils/splitAround(items, selectedIndex)` → `{ left, right }` (before → left, after → right).
-- `utils/embeds.ts`: `isSoundCloudUrl`, `isInstagramPostUrl`, `soundCloudEmbedSrc(url)`.
+- `utils/embeds.ts`: `isSoundCloudUrl`, `isInstagramPostUrl`, `soundCloudEmbedSrc(url)`, `spotifyEmbedPath(url)`, `youTubeVideoId(url)`, `youTubeEmbedSrc(id, origin)`. `utils/playerApis.ts` loads the YouTube and Spotify player APIs.
 - `utils/cloudinaryUrl(url, transform)`: inserts a transformation (e.g. `w_800,f_auto,q_auto`) after `/upload/`.
 - The existing `Card.tsx` is superseded by `ProjectTile` and removed.
 
@@ -150,9 +152,15 @@ The existing `/api/images/by-tag` endpoint is kept unchanged until the new front
 3. **Photos**: responsive grid of Cloudinary-resized thumbnails in order. Clicking opens the **Lightbox**: full-screen night overlay, the image at full resolution, ‹ › buttons, arrow keys and swipe navigate (wrapping), an "n / total" counter, and ✕, Escape or a backdrop click to close. Focus is trapped while open and restored on close.
 4. **Audio**: one compact teal/tangerine player per MP3 (play/pause, progress bar, track name). Only one track plays at a time across the page. Starting a track mutes the homepage background video and updates its mute icon. A rejected `play()` is caught: `AbortError` is ignored, other errors are logged as warnings, and the video stays muted. Closing or swapping a project pauses and releases its players.
 5. **SoundCloud**: official widget iframe built from the pasted URL.
-6. **Instagram**: official post embed; `embed.js` is loaded lazily the first time a project with an Instagram URL opens.
+6. **Spotify**: Spotify's player via its iFrame API (compact for a track or episode, taller for collections); plain embed iframe if the API fails to load.
+7. **YouTube**: `youtube-nocookie.com` player with the IFrame Player API enabled, 16:9.
+8. **Instagram**: official post embed; `embed.js` is loaded lazily the first time a project with an Instagram URL opens.
 
-Invalid SoundCloud or Instagram URLs → that block is not rendered.
+Invalid embed URLs → that block is not rendered.
+
+**Playback coordination**: one thing plays at a time across MP3s and embeds (`activeAudio.ts` holds the current player). An embed reports that it started playing through its provider's API: SoundCloud Widget `PLAY`, YouTube `onStateChange` PLAYING, Spotify `playback_update` (paused → playing only). That mutes the background video and pauses the previous player; starting an MP3 pauses a playing embed. Instagram has no API: focus moving into its iframe (window `blur`) is treated as playback; it mutes the video but can't be paused. Embed cleanup never touches a removed iframe (SoundCloud's widget throws if unbound after React removes it).
+
+**Layout**: the open panel scrolls to below the fixed navbar and is at most the space between the navbar and (on phones) the small-tile strip and fixed social bar; it shrinks to fit short content. Grid tiles cap at 20rem on phones; there's no horizontal scroll at 375px. The hero is shortened so the Theatre title shows at the bottom of the first screen.
 
 ### Background video coordination
 
@@ -183,7 +191,7 @@ The mute state in `Homepage.tsx` is lifted into a small context (`BackgroundVide
 
 Test files are **git-ignored and kept local-only** (owner's decision, 2026-10-03).
 
-**Manual checks** (dev server, before completion): motion feel, mobile layout, reduced motion, real SoundCloud and Instagram embeds, favicon in the browser tab.
+**Manual checks** (dev server, before completion): motion feel, mobile layout, reduced motion, real SoundCloud, Spotify, YouTube and Instagram embeds (incl. muting the background video), favicon in the browser tab.
 
 ## 6. Rollout
 

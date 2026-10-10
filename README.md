@@ -29,7 +29,7 @@ Harry manages projects entirely in the Cloudinary Media Library; no code changes
 ```
 theatre/
   01-shantify/
-    cover.jpg            <- metadata: Title, Description, blurb, link_to, soundcloud, instagram
+    cover.jpg            <- metadata: Title, Description, blurb, link_to, soundcloud, spotify, youtube, instagram
     01-rehearsal.jpg     <- optional context metadata: alt
     02-opening-night.jpg
     sea-shanty-medley.mp3
@@ -53,7 +53,11 @@ more-projects/
 | `blurb` | no | Longer text in the detail view |
 | `link_to` | no | Makes the cover a link (exposed as `link`) |
 | `soundcloud` | no | SoundCloud URL, rendered as the official widget |
+| `spotify` | no | Spotify track, album, playlist, episode, show or artist link, rendered with Spotify's player |
+| `youtube` | no | YouTube video link (`watch?v=`, `youtu.be/`, `/shorts/`, `/embed/`), rendered with the privacy-enhanced `youtube-nocookie.com` player |
 | `instagram` | no | Instagram post URL, embedded |
+
+Starting any player (an MP3, SoundCloud, Spotify or YouTube) mutes the homepage background video and pauses whichever other player was playing. Instagram has no player API, so clicking into an Instagram post counts as starting it: it mutes the video but can't be paused by other players.
 
 Photos use their built-in **Description** (`alt`) as alt text; the fallback is `"<title>, photo <n>"`.
 
@@ -82,6 +86,8 @@ Photos use their built-in **Description** (`alt`) as alt text; the fallback is `
       "blurb": "...",
       "link": "https://...",
       "soundcloud": "https://soundcloud.com/...",
+      "spotify": "https://open.spotify.com/track/...",
+      "youtube": "https://www.youtube.com/watch?v=...",
       "instagram": "https://www.instagram.com/p/...",
       "cover": { "url": "https://res.cloudinary.com/...", "alt": "Shantify" },
       "photos": [{ "url": "...", "alt": "..." }],
