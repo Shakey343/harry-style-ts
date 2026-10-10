@@ -166,6 +166,8 @@ Invalid embed URLs → that block is not rendered.
 
 The mute state in `Homepage.tsx` is lifted into a small context (`BackgroundVideoContext`) exposing `mute()`, so `AudioPlayer` can mute the video without querying the DOM.
 
+**Landing (2026-10-10)**: there is no "Enter" gate. Browsers block audible autoplay, so the video autoplays muted (`defaultMuted` + an explicit `play()` for iOS) and the first click or Enter/Space anywhere unmutes it (`hooks/useFirstInteraction`, capture phase, removed after the first interaction). A first click on the speaker button only toggles once. A "Tap anywhere for sound" hint sits under the subtitle until then. Unmuting the video pauses whatever is playing in a project (`pauseActivePlayback`). The hero is shorter than the screen (desktop `100svh − 17.5rem`, phone `100svh − 21rem`) so the Theatre title shows above the fold while the Theatre section keeps `py-40`. The side thumbnail strips grow with the page rather than scrolling in their own box.
+
 ## 4. Favicon and SEO
 
 - Generate from the HS logo into `public/`: `favicon.ico` (16/32/48), `favicon-48x48.png`, `apple-touch-icon.png` (180×180), `site.webmanifest`.
