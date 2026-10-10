@@ -12,7 +12,6 @@ const PLACEHOLDER_COUNT = 3;
 // with a gap; on phones the strip of small tiles sits above it and the fixed
 // social bar below it.
 const PANEL_MAX_H = "max-h-[calc(100dvh-20rem)] md:max-h-[calc(100dvh-8rem)]";
-const STRIP_MAX_H = "max-h-[calc(100dvh-8rem)]";
 
 const ProjectSection = ({ tag }: { tag: Section }) => {
   const { projects, status } = useProjects(tag);
@@ -118,11 +117,11 @@ const ProjectSection = ({ tag }: { tag: Section }) => {
 
     return (
       <div className="flex items-start gap-4">
-        <div data-testid="strip-left" className={`${stripClass} ${STRIP_MAX_H} flex-col overflow-y-auto`}>
+        <div data-testid="strip-left" className={`${stripClass} flex-col`}>
           {left.map((p) => renderTile(p, "small"))}
         </div>
         {detail}
-        <div data-testid="strip-right" className={`${stripClass} ${STRIP_MAX_H} flex-col overflow-y-auto`}>
+        <div data-testid="strip-right" className={`${stripClass} flex-col`}>
           {right.map((p) => renderTile(p, "small"))}
         </div>
       </div>
