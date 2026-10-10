@@ -61,28 +61,28 @@ const AudioPlayer = ({ track }: { track: Track }) => {
   };
 
   return (
-    <div className="flex items-center gap-3 rounded bg-teal px-4 py-3 shadow-md">
+    <div className="flex items-center gap-3 rounded bg-tangerine px-4 py-3 shadow-md">
       <audio ref={audioRef} src={track.url} preload="none" />
       <button
         type="button"
         aria-label={`${playing ? "Pause" : "Play"} ${track.name}`}
         onClick={handleToggle}
-        className="cursor-pointer text-tangerine font-medium min-w-[3.5rem] text-left"
+        className="cursor-pointer text-teal font-medium min-w-[3.5rem] text-left"
       >
         {playing ? "Pause" : "Play"}
       </button>
       <div className="flex min-w-0 flex-1 flex-col gap-1">
-        <span className="truncate text-bone">{track.name}</span>
+        <span className="truncate text-teal">{track.name}</span>
         <div
           role="progressbar"
           aria-label={`${track.name} progress`}
           aria-valuemin={0}
           aria-valuemax={100}
           aria-valuenow={Math.round(progress)}
-          className="h-1 w-full overflow-hidden rounded bg-bone/20"
+          className="h-1 w-full overflow-hidden rounded bg-teal/20"
         >
           <div
-            className="h-full bg-tangerine"
+            className="h-full bg-teal"
             style={{ width: `${progress}%` }}
           />
         </div>

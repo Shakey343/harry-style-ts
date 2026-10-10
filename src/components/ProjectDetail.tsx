@@ -60,7 +60,7 @@ const ProjectDetail = ({
   return (
     <section
       aria-labelledby={titleId}
-      className="relative overflow-x-clip bg-bone text-night"
+      className="relative overflow-x-clip bg-teal text-bone"
     >
       {/* Sticks just below the fixed navbar (112px on phones, 88px on desktop) */}
       <div className="sticky top-32 z-10 flex h-0 justify-end pr-4 md:top-28 animate-fade-in-after-grow motion-reduce:animate-none">
