@@ -20,17 +20,18 @@ const SoundCloudEmbed = ({ url }: { url: string }) => {
       .then(() => {
         if (cancelled || !iframeRef.current || !window.SC) return;
         const widget = window.SC.Widget(iframeRef.current);
-        widget.bind(window.SC.Widget.Events.PLAY, onPlay);
+        widget.bind(window.SC.Widget.Events.PLAY, () => {
+          if (!cancelled) onPlay();
+        });
         widgetRef.current = widget;
       })
       .catch(() => {
         // Without the widget API the player still works; it just can't mute the video.
       });
+    // No unbind: by cleanup time React has removed the iframe and the widget
+    // would throw talking to it. The cancelled flag silences late events.
     return () => {
       cancelled = true;
-      if (widgetRef.current && window.SC) {
-        widgetRef.current.unbind(window.SC.Widget.Events.PLAY);
-      }
       widgetRef.current = null;
     };
   }, [valid, url, onPlay]);

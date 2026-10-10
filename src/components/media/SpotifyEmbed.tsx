@@ -49,7 +49,12 @@ const SpotifyEmbed = ({ url }: { url: string }) => {
       });
     return () => {
       cancelled = true;
-      controllerRef.current?.destroy();
+      try {
+        controllerRef.current?.destroy();
+      } catch {
+        // Third-party cleanup must never take the page down (cf. SoundCloud,
+        // whose widget throws once its iframe is detached).
+      }
       controllerRef.current = null;
       target.remove();
     };
