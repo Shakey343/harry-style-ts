@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import harryStyleTitle from "../assets/harry-style.svg";
 import theatreTitle from "../assets/theatre.svg";
@@ -11,6 +11,7 @@ import About from "./About";
 import Footer from "./Footer";
 import Modal from "./Modal";
 import { useBackgroundVideo } from "../context/BackgroundVideoContext";
+import { useFirstInteraction } from "../hooks/useFirstInteraction";
 import cn from "../utils/cn";
 import Mute from "./icons/Mute";
 import Play from "./icons/Play";
@@ -18,9 +19,34 @@ import Play from "./icons/Play";
 
 const Homepage = () => {
   const { videoRef, muted, unmute, toggleMute } = useBackgroundVideo();
-  const [showPlayBtn, setShowPlayBtn] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [interacted, setInteracted] = useState(false);
+  const soundButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Browsers only allow sound after the visitor interacts, so the video starts
+  // muted and the first click or Enter/Space anywhere turns the sound on.
+  useFirstInteraction(() => {
+    setInteracted(true);
+    unmute();
+  }, soundButtonRef);
+
+  // Start muted playback explicitly: React sets `muted` only as a property, and
+  // iOS Safari won't autoplay without the muted state set up front.
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.defaultMuted = true;
+    video.muted = true;
+    video.play()?.catch(() => {
+      // Autoplay refused (e.g. Low Power Mode): the first tap still starts it.
+    });
+  }, [videoRef]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const openModal = () => {
     setIsModalVisible(true);
@@ -30,12 +56,9 @@ const Homepage = () => {
     setIsModalVisible(false);
   };
 
-  const handlePlayBtn = () => {
-    setShowPlayBtn(false);
-    unmute();
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
+  const handleSoundButton = () => {
+    setInteracted(true);
+    toggleMute();
   };
 
   return (
@@ -70,25 +93,14 @@ const Homepage = () => {
           established musicals in the musical theatre canon." />
         <meta name="twitter:image" content="https://res.cloudinary.com/dlaso8l44/image/upload/v1744223578/Harry_Style_Headshot_Left_ulqt4z.jpg" />
       </Helmet>
-      {showPlayBtn && (
-        <div className="fixed top-0 h-full w-full bg-night z-50 overflow-hidden">
-          <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-center">
-            <p className="text-tangerine mb-4 text-2xl">(Sound on)</p>
-            <button
-              className="bg-teal text-tangerine px-5 py-3 mb-4"
-              type="button"
-              onClick={handlePlayBtn}
-            >
-              Enter
-            </button>
-          </div>
-        </div>
-      )}
       <div className="relative">
         <Navbar openModal={openModal} />
-        <div className="h-[calc(100svh-13rem)] md:h-[calc(100svh-9rem)] overflow-hidden relative">
+        {/* Shorter than the screen so the Theatre title peeks above the fold
+            (phones also clear the fixed social bar). */}
+        <div className="h-[calc(100svh-21rem)] md:h-[calc(100svh-17.5rem)] overflow-hidden relative">
           <video
             ref={videoRef}
+            autoPlay
             loop
             muted
             playsInline
@@ -109,9 +121,11 @@ const Homepage = () => {
           </video>
 
           <button
+            ref={soundButtonRef}
             className="fixed bottom-20 md:bottom-[57px] left-6 md:left-8 hover:opacity-80"
             type="button"
-            onClick={toggleMute}
+            aria-label={muted ? "Turn sound on" : "Turn sound off"}
+            onClick={handleSoundButton}
           >
             {muted ? (
               <Mute className="text-tangerine md:text-teal" />
@@ -143,11 +157,16 @@ const Homepage = () => {
                   MUSICAL DIRECTOR
                 </p>
               </div>
+              {muted && !interacted && (
+                <p className="mt-6 text-lg tracking-wide text-tangerine animate-pulse motion-reduce:animate-none">
+                  Tap anywhere for sound
+                </p>
+              )}
             </div>
           </div>
         </div>
 
-        <Container className="pt-6 pb-40" id="theatre">
+        <Container className="py-40" id="theatre">
           <div className="w-full flex justify-center mb-16">
             <img src={theatreTitle} alt="Handwritten title - Theatre." className="md:scale-125" />
           </div>
