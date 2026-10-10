@@ -18,6 +18,13 @@ export default {
         serif: ['Nepomuk', 'serif'],
         nepomuk: ['Nepomuk'],
       },
+      keyframes: {
+        "fade-in": { from: { opacity: "0" }, to: { opacity: "1" } },
+      },
+      animation: {
+        // Starts once the tile-to-panel grow (LAYOUT_TRANSITION, 350ms) is done.
+        "fade-in-after-grow": "fade-in 300ms ease-out 350ms both",
+      },
     },
   },
   plugins: [],

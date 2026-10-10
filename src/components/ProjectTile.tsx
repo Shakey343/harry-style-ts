@@ -2,6 +2,7 @@ import { forwardRef } from "react";
 import { motion } from "motion/react";
 import type { Project } from "../types/project";
 import cloudinaryUrl from "../utils/cloudinaryUrl";
+import { LAYOUT_TRANSITION } from "../utils/motion";
 
 interface ProjectTileProps {
   project: Project;
@@ -19,6 +20,7 @@ const ProjectTile = forwardRef<HTMLButtonElement, ProjectTileProps>(
       <motion.button
         ref={ref}
         layoutId={"tile-" + slug}
+        transition={LAYOUT_TRANSITION}
         type="button"
         aria-label={title}
         aria-expanded={false}

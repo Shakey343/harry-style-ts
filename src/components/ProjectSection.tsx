@@ -6,6 +6,7 @@ import { useMediaQuery } from "../hooks/useMediaQuery";
 import splitAround from "../utils/splitAround";
 import ProjectTile from "./ProjectTile";
 import ProjectDetail from "./ProjectDetail";
+import { LAYOUT_TRANSITION } from "../utils/motion";
 
 const PLACEHOLDER_COUNT = 3;
 
@@ -94,6 +95,7 @@ const ProjectSection = ({ tag }: { tag: Section }) => {
       <motion.div
         key={selected.slug}
         layoutId={"tile-" + selected.slug}
+        transition={LAYOUT_TRANSITION}
         className="min-w-0 flex-1"
       >
         <ProjectDetail project={selected} onClose={reset} closeButtonRef={closeButtonRef} />

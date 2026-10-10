@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi } from "vitest";
 import { createRef } from "react";
@@ -24,6 +24,21 @@ describe("ProjectDetail", () => {
     expect(screen.queryByRole("button", { name: /Open photo/ })).toBeNull();
     expect(container.querySelector("audio")).toBeNull();
     expect(container.querySelector("iframe")).toBeNull();
+  });
+
+  it("cover stays hidden until its image has loaded, then fades in", () => {
+    renderDetail(base);
+    const img = screen.getByAltText("Cover");
+    expect(img).toHaveClass("opacity-0");
+    fireEvent.load(img);
+    expect(img).toHaveClass("opacity-100");
+    expect(img).not.toHaveClass("opacity-0");
+  });
+
+  it("content fades in after the panel has grown", () => {
+    renderDetail(base);
+    const content = screen.getByRole("heading", { level: 3 }).closest("section")!.firstElementChild!.nextElementSibling!;
+    expect(content).toHaveClass("animate-fade-in-after-grow");
   });
 
   it("header loads an optimised cover", () => {
