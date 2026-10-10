@@ -1,4 +1,4 @@
-import { loadScript } from "./loadScript";
+import loadScript from "./loadScript";
 
 // YouTube and Spotify announce readiness through a global callback rather
 // than the script's load event, so each loader waits for that callback.

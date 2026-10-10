@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { spotifyEmbedPath } from "../../utils/embeds";
 import { loadSpotifyApi } from "../../utils/playerApis";
-import { useEmbedPlayback } from "./useEmbedPlayback";
+import useEmbedPlayback from "./useEmbedPlayback";
 
-// Single items get the compact player; collections get the taller list player.
 const heightFor = (path: string) =>
   path.startsWith("track/") || path.startsWith("episode/") ? 152 : 352;
 
@@ -56,8 +55,7 @@ const SpotifyEmbed = ({ url }: { url: string }) => {
       try {
         controllerRef.current?.destroy();
       } catch {
-        // Third-party cleanup must never take the page down (cf. SoundCloud,
-        // whose widget throws once its iframe is detached).
+        // Third-party cleanup must never take the page down.
       }
       controllerRef.current = null;
       target.remove();

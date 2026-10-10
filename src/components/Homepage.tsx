@@ -11,7 +11,7 @@ import About from "./About";
 import Footer from "./Footer";
 import Modal from "./Modal";
 import { useBackgroundVideo } from "../context/BackgroundVideoContext";
-import { useFirstInteraction } from "../hooks/useFirstInteraction";
+import useFirstInteraction from "../hooks/useFirstInteraction";
 import cn from "../utils/cn";
 import Mute from "./icons/Mute";
 import Play from "./icons/Play";

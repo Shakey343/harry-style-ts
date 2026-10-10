@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { isSoundCloudUrl, soundCloudEmbedSrc } from "../../utils/embeds";
-import { loadScript } from "../../utils/loadScript";
-import { useEmbedPlayback } from "./useEmbedPlayback";
+import loadScript from "../../utils/loadScript";
+import useEmbedPlayback from "./useEmbedPlayback";
 
 const WIDGET_API = "https://w.soundcloud.com/player/api.js";
 

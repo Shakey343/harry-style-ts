@@ -4,10 +4,7 @@ import type { Project, Section } from "../types/project";
 
 type Status = "loading" | "ready" | "error";
 
-export function useProjects(section: Section): {
-  projects: Project[];
-  status: Status;
-} {
+export default function useProjects(section: Section) {
   const [projects, setProjects] = useState<Project[]>([]);
   const [status, setStatus] = useState<Status>("loading");
 
@@ -20,14 +17,10 @@ export function useProjects(section: Section): {
       )
       .then(res => {
         if (cancelled) return;
+        // A misconfigured backend URL can return index.html with a 200.
         const data = res.data?.projects;
-        if (Array.isArray(data)) {
-          setProjects(data);
-          setStatus("ready");
-        } else {
-          setProjects([]);
-          setStatus("error");
-        }
+        setProjects(Array.isArray(data) ? data : []);
+        setStatus(Array.isArray(data) ? "ready" : "error");
       })
       .catch(() => {
         if (cancelled) return;

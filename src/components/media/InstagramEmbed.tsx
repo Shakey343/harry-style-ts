@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { isInstagramPostUrl } from "../../utils/embeds";
-import { loadScript } from "../../utils/loadScript";
-import { useEmbedPlayback } from "./useEmbedPlayback";
+import loadScript from "../../utils/loadScript";
+import useEmbedPlayback from "./useEmbedPlayback";
 
 const EMBED_SCRIPT = "https://www.instagram.com/embed.js";
 

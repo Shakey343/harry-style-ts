@@ -2,7 +2,7 @@ import { describe, it, expect, afterEach, vi } from "vitest";
 import { render } from "@testing-library/react";
 import SoundCloudEmbed from "./SoundCloudEmbed";
 import InstagramEmbed from "./InstagramEmbed";
-import { loadScript } from "../../utils/loadScript";
+import loadScript from "../../utils/loadScript";
 
 vi.mock("../../context/BackgroundVideoContext", () => ({
   useBackgroundVideo: () => ({ mute: vi.fn() }),

@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import type { Photo } from "../../types/project";
 import cloudinaryUrl from "../../utils/cloudinaryUrl";
+import cn from "../../utils/cn";
 
 interface LightboxProps {
   photos: Photo[];
@@ -97,7 +98,7 @@ const Lightbox = ({ photos, index, onIndexChange, onClose }: LightboxProps) => {
         type="button"
         aria-label="Previous photo"
         onClick={() => go(-1)}
-        className={`${buttonClass} left-4 top-1/2 -translate-y-1/2`}
+        className={cn(buttonClass, "left-4 top-1/2 -translate-y-1/2")}
       >
         ‹
       </button>
@@ -106,7 +107,7 @@ const Lightbox = ({ photos, index, onIndexChange, onClose }: LightboxProps) => {
         type="button"
         aria-label="Next photo"
         onClick={() => go(1)}
-        className={`${buttonClass} right-4 top-1/2 -translate-y-1/2`}
+        className={cn(buttonClass, "right-4 top-1/2 -translate-y-1/2")}
       >
         ›
       </button>
@@ -115,7 +116,7 @@ const Lightbox = ({ photos, index, onIndexChange, onClose }: LightboxProps) => {
         type="button"
         aria-label="Close photo viewer"
         onClick={onClose}
-        className={`${buttonClass} right-4 top-4`}
+        className={cn(buttonClass, "right-4 top-4")}
       >
         ✕
       </button>

@@ -1,6 +1,6 @@
 import { renderHook } from "@testing-library/react";
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { useFirstInteraction } from "./useFirstInteraction";
+import useFirstInteraction from "./useFirstInteraction";
 
 const button = document.createElement("button");
 const ignoreRef = { current: button };

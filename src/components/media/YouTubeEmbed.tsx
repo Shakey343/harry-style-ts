@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { youTubeEmbedSrc, youTubeVideoId } from "../../utils/embeds";
 import { loadYouTubeApi } from "../../utils/playerApis";
-import { useEmbedPlayback } from "./useEmbedPlayback";
+import useEmbedPlayback from "./useEmbedPlayback";
 
 const YouTubeEmbed = ({ url }: { url: string }) => {
   const id = youTubeVideoId(url);

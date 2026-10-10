@@ -1,6 +1,6 @@
 const pending = new Map<string, Promise<void>>();
 
-export function loadScript(src: string): Promise<void> {
+export default function loadScript(src: string): Promise<void> {
   const existing = pending.get(src);
   if (existing) {
     return existing;

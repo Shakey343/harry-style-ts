@@ -4,11 +4,11 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import ProjectSection from "./ProjectSection";
 import { BackgroundVideoProvider } from "../context/BackgroundVideoContext";
 import type { Project } from "../types/project";
-import { useProjects } from "../hooks/useProjects";
-import { useMediaQuery } from "../hooks/useMediaQuery";
+import useProjects from "../hooks/useProjects";
+import useMediaQuery from "../hooks/useMediaQuery";
 
-vi.mock("../hooks/useProjects", () => ({ useProjects: vi.fn() }));
-vi.mock("../hooks/useMediaQuery", () => ({ useMediaQuery: vi.fn() }));
+vi.mock("../hooks/useProjects", () => ({ default: vi.fn() }));
+vi.mock("../hooks/useMediaQuery", () => ({ default: vi.fn() }));
 
 const cover = {
   url: "https://res.cloudinary.com/x/image/upload/v1/cover.jpg",

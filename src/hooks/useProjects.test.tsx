@@ -1,7 +1,7 @@
 import { renderHook, waitFor } from "@testing-library/react";
 import axios from "axios";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { useProjects } from "./useProjects";
+import useProjects from "./useProjects";
 
 vi.mock("axios");
 const mockedGet = vi.mocked(axios.get);

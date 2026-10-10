@@ -9,6 +9,7 @@ const PhotoGrid = ({ photos, title }: { photos: Photo[]; title: string }) => {
   return (
     <>
       <div
+        role="group"
         className="grid grid-cols-2 gap-3 md:grid-cols-3"
         aria-label={`${title} photos`}
       >

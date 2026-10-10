@@ -11,7 +11,7 @@ vi.mock("../../context/BackgroundVideoContext", () => ({
   useBackgroundVideo: () => ({ mute }),
 }));
 vi.mock("../../utils/loadScript", () => ({
-  loadScript: vi.fn(() => Promise.resolve()),
+  default: vi.fn(() => Promise.resolve()),
 }));
 
 // Another player starting (e.g. an MP3) — should pause whichever embed is playing.

@@ -2,6 +2,7 @@ import { forwardRef } from "react";
 import { motion } from "motion/react";
 import type { Project } from "../types/project";
 import cloudinaryUrl from "../utils/cloudinaryUrl";
+import cn from "../utils/cn";
 import { LAYOUT_TRANSITION } from "../utils/motion";
 
 interface ProjectTileProps {
@@ -23,12 +24,12 @@ const ProjectTile = forwardRef<HTMLButtonElement, ProjectTileProps>(
         transition={LAYOUT_TRANSITION}
         type="button"
         aria-label={title}
-        aria-expanded={false}
         title={isFull ? undefined : title}
         onClick={onSelect}
-        className={`group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-tangerine ${
+        className={cn(
+          "group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-tangerine",
           isFull ? "w-full max-w-xs md:w-auto md:max-w-none" : "shrink-0"
-        }`}
+        )}
       >
         <div
           className="tile-bob"
@@ -54,7 +55,7 @@ const ProjectTile = forwardRef<HTMLButtonElement, ProjectTileProps>(
           ) : (
             <div className="h-20 w-16 overflow-hidden border-4 border-teal shadow">
               <img
-                src={cloudinaryUrl(cover.url, "w_800,f_auto,q_auto")}
+                src={cloudinaryUrl(cover.url, "w_200,f_auto,q_auto")}
                 alt=""
                 className="h-full w-full object-cover"
               />

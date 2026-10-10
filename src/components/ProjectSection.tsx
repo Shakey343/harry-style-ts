@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { LayoutGroup, motion } from "motion/react";
 import type { Project, Section } from "../types/project";
-import { useProjects } from "../hooks/useProjects";
-import { useMediaQuery } from "../hooks/useMediaQuery";
+import useProjects from "../hooks/useProjects";
+import useMediaQuery from "../hooks/useMediaQuery";
 import splitAround from "../utils/splitAround";
 import ProjectTile from "./ProjectTile";
 import ProjectDetail from "./ProjectDetail";
+import cn from "../utils/cn";
 import { LAYOUT_TRANSITION } from "../utils/motion";
 
 const PLACEHOLDER_COUNT = 3;
@@ -113,7 +114,7 @@ const ProjectSection = ({ tag }: { tag: Section }) => {
         <div className="flex flex-col gap-4">
           <div
             data-testid="strip-mobile"
-            className={`${stripClass} overflow-x-auto`}
+            className={cn(stripClass, "overflow-x-auto")}
           >
             {[...left, ...right].map(p => renderTile(p, "small"))}
           </div>
@@ -124,11 +125,11 @@ const ProjectSection = ({ tag }: { tag: Section }) => {
 
     return (
       <div className="flex items-start gap-4">
-        <div data-testid="strip-left" className={`${stripClass} flex-col`}>
+        <div data-testid="strip-left" className={cn(stripClass, "flex-col")}>
           {left.map(p => renderTile(p, "small"))}
         </div>
         {detail}
-        <div data-testid="strip-right" className={`${stripClass} flex-col`}>
+        <div data-testid="strip-right" className={cn(stripClass, "flex-col")}>
           {right.map(p => renderTile(p, "small"))}
         </div>
       </div>

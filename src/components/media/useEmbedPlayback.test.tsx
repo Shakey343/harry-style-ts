@@ -1,6 +1,6 @@
 import { renderHook, act } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { useEmbedPlayback } from "./useEmbedPlayback";
+import useEmbedPlayback from "./useEmbedPlayback";
 import { claimPlayback, releasePlayback } from "./activeAudio";
 
 const mute = vi.fn();

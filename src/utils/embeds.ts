@@ -38,7 +38,7 @@ const SPOTIFY_TYPES = [
   "artist",
 ];
 
-// "track/<id>" for https://open.spotify.com/[intl-xx/]<type>/<id>, else null.
+// "<type>/<id>" from https://open.spotify.com/[intl-xx/]<type>/<id>.
 export function spotifyEmbedPath(url: string): string | null {
   const parsed = parseHttps(url);
   if (parsed === null || parsed.hostname !== "open.spotify.com") return null;
