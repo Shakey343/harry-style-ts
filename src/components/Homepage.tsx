@@ -155,7 +155,7 @@ const Homepage = () => {
               "absolute left-1/2 -translate-x-1/2 transition-all duration-1000 ease-in-out",
               loading
                 ? "top-2/3 -translate-y-1/2 sm:scale-125"
-                : "top-[32%] md:top-[20%] scale-[80%] sm:scale-75"
+                : "top-[max(6.5rem,32%)] md:top-[20%] scale-[80%] sm:scale-75"
             )}
           >
             <div className="text-center text-nowrap text-bone2 md:text-bone drop-shadow-xl">

@@ -146,6 +146,25 @@ describe("ProjectSection", () => {
     expect(screen.getByRole("button", { name: "Bravo" })).toHaveFocus();
   });
 
+  it("on phones, opening and closing jump instead of smooth-scrolling", async () => {
+    mockedUseMediaQuery.mockReturnValue(false);
+    renderSection();
+    const scroll = vi.mocked(Element.prototype.scrollIntoView);
+    scroll.mockClear();
+    await userEvent.click(screen.getByRole("button", { name: "Bravo" }));
+    expect(scroll).toHaveBeenLastCalledWith({
+      behavior: "auto",
+      block: "start",
+    });
+    await userEvent.click(
+      screen.getByRole("button", { name: "Close project" })
+    );
+    expect(scroll).toHaveBeenLastCalledWith({
+      behavior: "auto",
+      block: "center",
+    });
+  });
+
   it("closing scrolls the closed tile back into view", async () => {
     renderSection();
     await userEvent.click(screen.getByRole("button", { name: "Bravo" }));
@@ -157,7 +176,10 @@ describe("ProjectSection", () => {
     const tile = screen.getByRole("button", { name: "Bravo" });
     expect(scroll).toHaveBeenCalledTimes(1);
     expect(scroll.mock.contexts[0]).toBe(tile);
-    expect(scroll).toHaveBeenCalledWith({ behavior: "smooth", block: "center" });
+    expect(scroll).toHaveBeenCalledWith({
+      behavior: "smooth",
+      block: "center",
+    });
   });
 
   it("escape resets grid", async () => {

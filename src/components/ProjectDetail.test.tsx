@@ -56,6 +56,8 @@ describe("ProjectDetail", () => {
       .getByRole("heading", { level: 3 })
       .closest("section")!.firstElementChild!.nextElementSibling!;
     expect(content).toHaveClass("animate-fade-in-after-grow");
+    // Phones skip the grow, so the content shows straight away.
+    expect(content).toHaveClass("max-md:animate-none");
   });
 
   it("header loads an optimised cover", () => {

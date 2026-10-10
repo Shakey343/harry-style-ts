@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { LayoutGroup, motion } from "motion/react";
+import { LayoutGroup, MotionConfig, motion } from "motion/react";
 import type { Project, Section } from "../types/project";
 import useProjects from "../hooks/useProjects";
 import useMediaQuery from "../hooks/useMediaQuery";
@@ -14,6 +14,8 @@ const PLACEHOLDER_COUNT = 3;
 const ProjectSection = ({ tag }: { tag: Section }) => {
   const { projects, status } = useProjects(tag);
   const isDesktop = useMediaQuery("(min-width: 768px)");
+  // Phones skip the grow/shrink and smooth scrolling: snappier on small screens.
+  const scrollBehavior = isDesktop ? "smooth" : "auto";
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
 
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -30,15 +32,18 @@ const ProjectSection = ({ tag }: { tag: Section }) => {
     } else if (lastSlugRef.current) {
       const tile = tileRefs.current[lastSlugRef.current];
       // The page shrinks a lot when the panel closes; bring the tile back into view.
-      tile?.scrollIntoView({ behavior: "smooth", block: "center" });
+      tile?.scrollIntoView({ behavior: scrollBehavior, block: "center" });
       tile?.focus({ preventScroll: true });
       lastSlugRef.current = null;
     }
-  }, [selectedSlug]);
+  }, [selectedSlug, scrollBehavior]);
 
   const select = (slug: string) => {
     setSelectedSlug(slug);
-    sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    sectionRef.current?.scrollIntoView({
+      behavior: scrollBehavior,
+      block: "start",
+    });
   };
 
   const reset = () => {
@@ -140,16 +145,18 @@ const ProjectSection = ({ tag }: { tag: Section }) => {
   };
 
   return (
-    <LayoutGroup id={tag}>
-      <div
-        ref={sectionRef}
-        tabIndex={-1}
-        onKeyDown={handleKeyDown}
-        className="scroll-mt-32 focus:outline-none md:scroll-mt-28"
-      >
-        {renderContent()}
-      </div>
-    </LayoutGroup>
+    <MotionConfig reducedMotion={isDesktop ? "user" : "always"}>
+      <LayoutGroup id={tag}>
+        <div
+          ref={sectionRef}
+          tabIndex={-1}
+          onKeyDown={handleKeyDown}
+          className="scroll-mt-32 focus:outline-none md:scroll-mt-28"
+        >
+          {renderContent()}
+        </div>
+      </LayoutGroup>
+    </MotionConfig>
   );
 };
 
