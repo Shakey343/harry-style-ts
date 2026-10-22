@@ -1,11 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type RefObject } from "react";
 import cn from "../utils/cn";
 import Button from "./Button";
 import hsLogo from "../assets/hs-logo.svg";
 
-const Navbar = ({ openModal }: { openModal: () => void }) => {
+const Navbar = ({
+  openModal,
+  heroTitleRef,
+}: {
+  openModal: () => void;
+  heroTitleRef: RefObject<HTMLElement>;
+}) => {
   const [showVariant, setShowVariant] = useState(false);
+  const [titleHidden, setTitleHidden] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const barRef = useRef<HTMLDivElement>(null);
 
   const handleCloseMobileMenu = () => {
     setShowMobileMenu(false);
@@ -21,29 +29,50 @@ const Navbar = ({ openModal }: { openModal: () => void }) => {
   };
 
   useEffect(() => {
-    document.addEventListener("scroll", () => {
-      if (!document.scrollingElement) {
-        return;
-      }
-      const scrolled = document.scrollingElement.scrollTop;
-
-      if (scrolled >= 180) {
-        setShowVariant(true);
-      } else {
-        setShowVariant(false);
-      }
-    });
+    const handleScroll = () => setShowVariant(window.scrollY >= 180);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Phones swap the hero title for the bar's HS logo only once the title has
+  // scrolled up under the bar, so the two are never on screen together.
+  useEffect(() => {
+    const title = heroTitleRef.current;
+    if (!title) return;
+    const barHeight = barRef.current?.offsetHeight ?? 0;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setTitleHidden(
+          !entry.isIntersecting && entry.boundingClientRect.top < barHeight
+        );
+      },
+      { rootMargin: `-${barHeight}px 0px 0px 0px` }
+    );
+    observer.observe(title);
+    return () => observer.disconnect();
+  }, [heroTitleRef]);
+
+  useEffect(() => {
+    if (!showMobileMenu) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setShowMobileMenu(false);
+    };
+    document.body.style.overflow = "hidden";
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = "";
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [showMobileMenu]);
 
   return (
     <nav>
       <div
+        ref={barRef}
         className={cn(
-          "h-fit min-h-[88px] w-full flex items-center px-8 md:px-[80px] py-5 fixed top-0 z-30 transition-all ease-in duration-300",
-          showVariant
-            ? "justify-between md:bg-tangerine md:shadow"
-            : "md:justify-end justify-between",
-          "bg-tangerine sm:bg-transparent"
+          "h-fit min-h-[88px] w-full flex items-center px-8 md:px-[80px] py-5 fixed top-0 z-30 md:transition-all ease-in duration-300 max-md:transition-none",
+          showVariant ? "md:justify-between md:bg-tangerine md:shadow" : "md:justify-end",
+          titleHidden ? "max-md:bg-tangerine" : ""
         )}
       >
         {showVariant && (
@@ -51,57 +80,32 @@ const Navbar = ({ openModal }: { openModal: () => void }) => {
             <img src={hsLogo} className="h-12" alt="Handwritten logo of Harry's initials - HS" />
           </a>
         )}
-        <a
-          href="#"
-          className="mr-6 md:hidden block"
-          onClick={handleCloseMobileMenu}
-        >
-          <img src={hsLogo} alt="Handwritten logo of Harry's initials - HS" />
-        </a>
-        <div className="inset-y-0 left-0 flex items-center sm:hidden">
-          <button
-            type="button"
-            className="relative inline-flex items-center justify-center rounded-md p-2 text-teal hover:bg-gray-700 hover:text-white focus:ring-2 focus:ring-white focus:outline-hidden focus:ring-inset"
-            aria-controls="mobile-menu"
-            aria-expanded="false"
-            onClick={handleToggleMobileMenu}
+        {titleHidden && (
+          <a
+            href="#"
+            className="mr-6 md:hidden block"
+            onClick={handleCloseMobileMenu}
           >
-            <span className="absolute -inset-0.5"></span>
-            <span className="sr-only">Open main menu</span>
-            <svg
-              className="block size-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              aria-hidden="true"
-              data-slot="icon"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-              />
-            </svg>
-            <svg
-              className="hidden size-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              aria-hidden="true"
-              data-slot="icon"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6 18 18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
-        </div>
+            <img src={hsLogo} alt="Handwritten logo of Harry's initials - HS" />
+          </a>
+        )}
+        <button
+          type="button"
+          className={cn(
+            "tham tham-e-squeeze tham-w-6 ml-auto md:hidden",
+            showMobileMenu ? "tham-active" : ""
+          )}
+          aria-controls="mobile-menu"
+          aria-expanded={showMobileMenu}
+          aria-label={showMobileMenu ? "Close menu" : "Open menu"}
+          onClick={handleToggleMobileMenu}
+        >
+          <div className="tham-box">
+            <div className="tham-inner bg-teal" />
+          </div>
+        </button>
         <div
-          className="gap-[60px] items-center h-full sm:flex hidden text-teal"
+          className="gap-[60px] items-center h-full md:flex hidden text-teal"
         >
           <a href="#theatre" className="hover:underline underline-offset-4 transition-all duration-300 ease">Theatre</a>
           <a href="#projects" className="hover:underline underline-offset-4 transition-all duration-300 ease">More Projects</a>
@@ -113,13 +117,12 @@ const Navbar = ({ openModal }: { openModal: () => void }) => {
             onClick={openModal}
           />
         </div>
-      </div>
-      {showMobileMenu && (
-        <div
-          className="sm:hidden fixed top-[100px] bg-tangerine w-full z-50"
-          id="mobile-menu"
-        >
-          <div className="space-y-2 px-8 pb-6 flex flex-col items-end text-teal shadow-lg">
+        {/* Behind the bar's logo and toggle, so the toggle becomes the ✕. */}
+        {showMobileMenu && (
+          <div
+            className="md:hidden fixed inset-0 -z-10 bg-tangerine px-8 pt-36 flex flex-col items-start gap-6 text-3xl text-teal"
+            id="mobile-menu"
+          >
             <a href="#theatre" onClick={handleCloseMobileMenu}>
               Theatre
             </a>
@@ -130,14 +133,14 @@ const Navbar = ({ openModal }: { openModal: () => void }) => {
               About
             </a>
             <Button
-              className=""
+              className="mt-10"
               initialWord="Get in touch"
               hoverWord="Email me"
               onClick={handleCloseMenuAndOpenModal}
             />
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </nav>
   );
 };

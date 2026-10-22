@@ -25,3 +25,9 @@ dist-ssr
 
 .env*
 .env*
+
+# Superpowers brainstorming companion
+.superpowers/
+
+# Local Claude Code settings
+.claude/settings.local.json
